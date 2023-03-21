@@ -5,10 +5,6 @@ Waste ink counter resetter for some (EPSON) printers.
 Free and open. Python code. Drawing heavily on [ReInk](https://github.com/lion-simba/reink/).
 
 
-# DISCLAIMER
-
-
-
 # CLI usage
 
 Probing a printer:
@@ -42,3 +38,8 @@ python3 -m reinkpy.epson -v --reset [addresses]
 ```
 
 To set other values, see the python API.
+
+
+# Warning
+
+This is software. It won't actually replace pads.
