@@ -43,3 +43,10 @@ To set other values, see the python API.
 # Warning
 
 This is software. It won't actually replace pads.
+
+
+# Installing
+
+```
+pip install -e git+https://codeberg.org/atufi/reinkpy#egg=reinkpy
+```
