@@ -128,7 +128,7 @@ class EpsonPrinter(core.Printer):
 
     def reset_waste(self):
         "Reset the waste ink counter"
-        return self.reset(self.addr_wate) # + self.byte_confirm
+        return self.reset(self.addr_waste) # + self.byte_confirm
 
     # ('Ink Information', b'\x0f\x13\x03(BBB)*', 'inkCartridgeName inkColor inkRemainCounter')
 
