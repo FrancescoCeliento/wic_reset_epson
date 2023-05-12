@@ -41,6 +41,7 @@ MODELS = {
     "XP-540": dict(
          rkey = 0x0414,
          wkey = b'Gjsnjbob', # Firmiana
+         addr_waste = range(0x10,0x15),
      ),
 
     "XP-610": dict(
