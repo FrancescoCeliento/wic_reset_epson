@@ -13,6 +13,12 @@ MODELS = {
         wkey = b'Bsboujgp', # Arantifo
     ),
 
+    "XP-205": dict(
+        rkey = 0x0719,
+        wkey = b'Xblbupcj',
+        addr_waste = range(0x18,0x1b),
+    ),
+
     "XP-315": dict(
         rkey = 0x0881,
         wkey = b'Xblbupcj', # Wakatobi
