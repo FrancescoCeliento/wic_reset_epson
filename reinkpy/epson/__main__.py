@@ -14,6 +14,7 @@ def int_(s):
 def cli():
 
     c = argparse.ArgumentParser(
+        prog="python -m reinkpy.epson",
         description="Probe the first USB Epson printer found",
         epilog="")
     c.add_argument('--rkey', type=int_,
