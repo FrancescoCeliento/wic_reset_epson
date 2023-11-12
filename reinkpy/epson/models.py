@@ -4,6 +4,14 @@
 # TODO: this should probably be keyed by wkey/rkey rather than by advertised model name
 MODELS = {
 
+    "ET-2720": dict(
+        rkey = 0x0797,
+        wkey = b'Nbsjcbzb', # Laribaya
+        addr_waste = range(0x2f,0x38), # + (0x1c,)
+        # range(0x0120, 0x012a), range(0x0727,0x072c), range(0x07f4,0x07fe),
+        # range(0x02f,0x034), range(0x0644,0x064e)
+    ),
+
     "L355": dict(
         rkey = 0x0941,
     ),
@@ -11,6 +19,10 @@ MODELS = {
     "L4160": dict(
         rkey = 0x0849,
         wkey = b'Bsboujgp', # Arantifo
+    ),
+
+    "SX400": dict(
+        rkey = 0x0649,
     ),
 
     "XP-205": dict(
