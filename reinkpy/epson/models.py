@@ -6,7 +6,7 @@ MODELS = {
 
     "ET-2720": dict(
         rkey = 0x0797,
-        wkey = b'Nbsjcbzb', # Laribaya
+        wkey = b'Nbsjcbzb', # Maribaya
         addr_waste = range(0x2f,0x38), # + (0x1c,)
         # range(0x0120, 0x012a), range(0x0727,0x072c), range(0x07f4,0x07fe),
         # range(0x02f,0x034), range(0x0644,0x064e)
