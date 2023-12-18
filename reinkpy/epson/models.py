@@ -103,6 +103,12 @@ MODELS = {
         wkey = b'Ijcjtdvt', # Hibiscus
     ),
 
+    "XP-2150": dict(
+        rkey = 0x0950,
+        wkey = b'Cjebebsj', # Bidadari
+        addr_waste = range(0x0150,0x0159), # and 0x1c
+    ),
+
     "XP-7100": dict(
         rkey = 0x0528,
         wkey = b'Mfvdpkvn', # Leucojum
