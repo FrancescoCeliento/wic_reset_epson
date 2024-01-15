@@ -35,6 +35,8 @@ MODELS = {
     "XP-55": dict(
         rkey = 0x0479,
         wkey = b'Hpttzqjv', # Gossypiu
+        addr_waste = range(0x10,0x16), # "main waste" + "additional maintenance" counters
+        # 0x06,0x34,0x35,0x01ed
     ),
 
     "XP-205": dict(
