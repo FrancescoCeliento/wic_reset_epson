@@ -4,6 +4,12 @@
 # TODO: this should probably be keyed by wkey/rkey rather than by advertised model name
 MODELS = {
 
+    "ET-2600": dict(
+        rkey = 0x0810,
+        wkey = b'Tjobcvoh', 
+        addr_waste = [0x18,0x19],
+    ),
+    
     "ET-2650": dict(
         rkey = 0x0810,
         wkey = b'Tjobcvoh', # Sinabung
