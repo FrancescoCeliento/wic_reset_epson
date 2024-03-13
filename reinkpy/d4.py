@@ -47,7 +47,7 @@ class D4Link:
     def __enter__(self):
         if self._nctx == 0:
             if not self._send_init():
-                raise Exception('Init failed: %s' % p)
+                raise Exception('Init failed')
         self._nctx += 1
         return self
 
@@ -66,15 +66,18 @@ class D4Link:
                 elif rev == 0x20:
                     self.txn.protocol = protocol_0x20
                 else:
-                    raise Exception('Unknown revision %s' % rev)
+                    _log.error('Unknown revision %s', rev)
+                    return
                 return self._send_init(rev)
 
     def __exit__(self, *exc):
         if self._nctx <= 1:
-            self.txn('Exit')
-            # self._init_channels()
-            self.txn.credit = 0
-        self._nctx = max(0, self._nctx)
+            if self.txn('Exit'):
+                self.txn.credit = 0
+                _log.info('Exit OK')
+            else:
+                _log.error('Exit failed')
+        self._nctx -= 1 # max(0, self._nctx - 1)
 
     # def __call__(self, *a, **kw):
     #     return self.txn(*a, **kw)
@@ -87,7 +90,8 @@ class D4Link:
                 self.txn('CreditRequest', *channel.cid)
                 # self.txn('Credit', *channel.cid, 1)
             else:
-                raise Exception('Missing credits to send on %s' % (channel.cid,))
+                _log.error('Missing credits to send on %s', (channel.cid,))
+                return
         channel.credit -= cost
         b = self.protocol.encode(payload, *channel.cid, credit, control)
         _log.debug('Sending on %s: %s', channel.cid, helpers.hexdump(b, prefix='\n<<'))
@@ -137,7 +141,8 @@ class D4Link:
             else:
                 p = self.txn('GetSocketID', serviceName)
         if not p or p.result != 0x00:
-            raise Exception('Cannot get channel for %s %s: %s', serviceName, cid, p)
+            _log.error('Cannot get channel for %s %s: %s', (serviceName, cid, p))
+            return
         cid = (p.socketID, p.socketID) # mirror peer
         c = self.channels[cid] = Channel(self, cid, p.serviceName)
         return c
@@ -284,11 +289,12 @@ class TXChannel:
                 if p.name == cmd + 'Reply':
                     return p
                 else:
-                    _log.warning('Dropping non-%s packet: %s', cmd+'Reply', p)
+                    _log.debug('TX: dropping packet (not a %s): %s', cmd+'Reply', p)
+        _log.warning('TX: did not receive expected %s', cmd+'Reply')
 
     def send(self, cmd, *a, **kw):
         payload = self.protocol.encode(cmd, *a, **kw)
-        _log.debug('Sending transaction: %s', (self.protocol.decode(payload),))
+        _log.debug('TX: sending: %s', (self.protocol.decode(payload),))
         return self.link.send(payload, self, cost=0 if cmd == 'Init' else 1,
                               check=cmd not in ('CreditRequest', 'Credit'))
 
@@ -296,17 +302,17 @@ class TXChannel:
         try:
             p = self.protocol.decode(data)
         except:
-            _log.warning('Received invalid transaction packet:\n%s',
+            _log.warning('TX: received invalid packet:\n%s',
                          helpers.hexdump(data, prefix='\n>>'))
         else:
-            _log.debug('Received transaction: %s', (p,))
+            _log.debug('TX: received: %s', (p,))
             self._received = p
             if hasattr(p, 'addCredit'):
                 c = self.link.channels[(p.sidP, p.sidS)]
                 c.credit += p.addCredit
-                _log.debug('Added %i credits to (%s,%s), now has %i', p.addCredit, *c.cid, c.credit)
+                _log.debug('TX: added %i credits to (%s,%s), now has %i', p.addCredit, *c.cid, c.credit)
             if p.name == 'Error':
-                _log.error('Received: %s %s', p, self.protocol.ERRORS[p.errorCode])
+                _log.warning('TX: received: %s %s', p, self.protocol.ERRORS[p.errorCode])
 
 class Channel:
     class protocol:
@@ -339,8 +345,8 @@ class Channel:
         return self.retreive()
 
     def retreive(self, retries=6):
-        if getattr(self, '_received', None):
-            _log.debug('Dropping previous packet received: %s', self._received)
+        # if getattr(self, '_received', None):
+        #     _log.debug('%s: Dropping previous packet received: %s', self.name, self._received)
         self._received = None
         for r in range(1 + retries):
             self.link.retreive()
@@ -349,7 +355,7 @@ class Channel:
 
     def send(self, *a, **kw):
         data = self.protocol.encode(*a, **kw)
-        _log.debug('Sending on %s:\n%s', self.name, self.protocol.decode(data))
+        # _log.debug('%s: sending:\n%s', self.name, self.protocol.decode(data))
         _log.log(15, '%s << %s', self.name, self.protocol.decode(data))
         return self.link.send(data, self)
 
