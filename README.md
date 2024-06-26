@@ -2,42 +2,40 @@ ReInkPy
 =======
 Waste ink counter resetter for some (EPSON) printers.
 
-Free and open. Python code. Drawing heavily on [ReInk](https://github.com/lion-simba/reink/).
+Free and open. Python code.
 
 
-# CLI usage
+# Simple GUI usage
 
-Probing a printer:
-```
-python3 -m reinkpy.epson -v | tee report-with-eeprom-backup.log
-```
+Download and execute the latest release as `.pyz` file.
 
-Searching for keys:
+
+# More advanced tasks and development
+
 ```
-python3 -m reinkpy.epson --search-file some-reset-session.pcapng
-```
-or
-```
-python3 -m reinkpy.epson --search-file some-adjprog.exe | sort -u >potential-keys
+pip install -e git+https://codeberg.org/atufi/reinkpy#egg=reinkpy
 ```
 
-Trying many potential keys:
+Python API example:
+
 ```
-python3 -m reinkpy.epson --try-keys-from wordlists/wikidata-taxons.csv.alnum.words.Keys8
+from reinkpy import *
+
+d = next(Device.ifind()).driver.configure()
+assert d.specs.model # model is known
+d.do_id()
+d.do_reset_All_waste_counters_…() # dynamically generated methods
+d.read_eeprom()
+d.write_eeprom((address, value), …)
 ```
 
-Specifying a write key once it's known:
-```
-python3 -m reinkpy.epson -v --wkey 'Thekey//'
-```
-(Then please share it!)
+`python -m reinkpy.ui` launches the GUI.
 
-Resetting a waste ink pad counter with known EEPROM addresses:
-```
-python3 -m reinkpy.epson -v --reset [addresses]
-```
 
-To set other values, see the python API.
+# Requirements
+
+- [python](https://python.org)
+- (optional) some USB backend for [libusb](https://libusb.info)
 
 
 # Warning
@@ -45,8 +43,7 @@ To set other values, see the python API.
 This is software. It won't actually replace pads.
 
 
-# Installing
+# Similar projects
 
-```
-pip install -e git+https://codeberg.org/atufi/reinkpy#egg=reinkpy
-```
+This was started as a port of [ReInk](https://github.com/lion-simba/reink/).
+See also [epson_print_conf](https://github.com/Ircama/epson_print_conf).

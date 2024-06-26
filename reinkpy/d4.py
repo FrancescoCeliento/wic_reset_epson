@@ -5,22 +5,26 @@ __all__ = (
     'decode',
 )
 
-from collections import namedtuple as _namedtuple
-import struct as _struct
-from time import sleep as _sleep
+from . import helpers
+
+import collections, contextlib, struct, time
 import logging
 _log = logging.getLogger(__name__)
+del logging
 
-from . import helpers
 
 DELAY = 0.0
 
 
 class D4Link:
+
+    CMD_ENTER_D4: bytes = None
+    CMD_ENTER_D4_REPLY: bytes = None
+
     class protocol:
-        hTuple = _namedtuple('D4PacketHeader', 'psid ssid length credit control')
-        hStruct = _struct.Struct('>BBHBB')
-        hLen = hTuple.hLen = _struct.calcsize(hStruct.format) # 6
+        hTuple = collections.namedtuple('D4PacketHeader', 'psid ssid length credit control')
+        hStruct = struct.Struct('>BBHBB')
+        hLen = hTuple.hLen = struct.calcsize(hStruct.format) # 6
         hTuple.payload_length = property(lambda self: self.length - self.hLen)
         hTuple.cid = property(lambda self: self[:2])
 
@@ -46,6 +50,18 @@ class D4Link:
 
     def __enter__(self):
         if self._nctx == 0:
+            self._exit_stack = contextlib.ExitStack()
+            self._exit_stack.enter_context(self.target)
+            if self.CMD_ENTER_D4:
+                _log.info('Entering IEEE 1284.4 mode...')
+                assert self.target.write(self.CMD_ENTER_D4)
+                r = b''
+                for i in range(5):
+                    r += self.target.read()
+                    if self.CMD_ENTER_D4_REPLY in r:
+                        break
+                else:
+                    _log.warn('Entering IEEE 1284.4 mode failed with response: %r' % r)
             if not self._send_init():
                 raise Exception('Init failed')
         self._nctx += 1
@@ -71,13 +87,14 @@ class D4Link:
                 return self._send_init(rev)
 
     def __exit__(self, *exc):
-        if self._nctx <= 1:
+        self._nctx -= 1
+        if self._nctx == 0:
             if self.txn('Exit'):
                 self.txn.credit = 0
                 _log.info('Exit OK')
             else:
                 _log.error('Exit failed')
-        self._nctx -= 1 # max(0, self._nctx - 1)
+            self._exit_stack.close()
 
     # def __call__(self, *a, **kw):
     #     return self.txn(*a, **kw)
@@ -149,22 +166,22 @@ class D4Link:
 
 
 def _make_tx_command(code, name, sformat, fields, defaults=()):
-    hTuple = _namedtuple('%s' % name, fields, defaults=defaults)
+    hTuple = collections.namedtuple('%s' % name, fields, defaults=defaults)
     hTuple.code = code
     hTuple.name = name
 
-    hStruct = _struct.Struct('>' + sformat.replace('*', ''))
+    hStruct = struct.Struct('>' + sformat.replace('*', ''))
     hFormat = hStruct.format
-    hLen = _struct.calcsize(hStruct.format)
+    hLen = struct.calcsize(hStruct.format)
     star = fields[-1] if sformat.endswith('*') else None # serviceName
 
     def decode(b):
         if len(b) < hLen and not star:
             # _log.debug('Decoding truncated commmand: %s', b.hex())
             for sCap in range(len(hFormat)-1,1,-1):
-                bCap = _struct.calcsize(hFormat[:sCap])
+                bCap = struct.calcsize(hFormat[:sCap])
                 if bCap <= len(b):
-                    return hTuple(*_struct.unpack(hFormat[:sCap], b[:bCap]))
+                    return hTuple(*struct.unpack(hFormat[:sCap], b[:bCap]))
         f = hStruct.unpack(b[:hLen])
         if star:
             return hTuple(*f, b[hLen:].decode('ascii'))
@@ -191,7 +208,7 @@ def _make_tx_command(code, name, sformat, fields, defaults=()):
 class protocol:
     @classmethod
     def decode(cls, b):
-        cmd = cls.cmd_by_code[_struct.unpack('B', b[:1])[0]]
+        cmd = cls.cmd_by_code[struct.unpack('B', b[:1])[0]]
         return cmd.decode(b[1:])
 
     @classmethod
@@ -221,7 +238,7 @@ class protocol_0x20(protocol):
         (0x82, 'CloseChannelReply',   'BBB',   'result sidP sidS'),
         (0x03, 'Credit',              'BBH',   'sidP sidS addCredit'),
         (0x83, 'CreditReply',         'BBB',   'result sidP sidS'),
-        (0x04, 'CreditRequest',       'BBH',   'sidP sidS maxCredit'),
+        (0x04, 'CreditRequest',       'BBH',   'sidP sidS maxCredit', (0x0,)),
         (0x84, 'CreditRequestReply',  'BBBH',  'result sidP sidS addCredit'),
         (0x08, 'Exit',                '',      ''),
         (0x88, 'ExitReply',           'B',     'result'),
@@ -281,7 +298,7 @@ class TXChannel:
     def __call__(self, cmd, *a, **kw):
         ok = self.send(cmd, *a, **kw)
         self._received = None
-        _sleep(DELAY)
+        time.sleep(DELAY)
         for r in range(8):
             self.link.retreive()
             if self._received:
@@ -315,15 +332,11 @@ class TXChannel:
                 _log.warning('TX: received: %s %s', p, self.protocol.ERRORS[p.errorCode])
 
 class Channel:
-    class protocol:
-        decode = staticmethod(helpers.hexdump)
-        encode = staticmethod(bytes)
 
-    def __init__(self, link, cid, name, protocol=protocol):
+    def __init__(self, link, cid, name):
         self.link = link
         self.cid = cid
         self.name = name
-        self.protocol = protocol
         self.credit = 0
         # maxPTS, maxSTP = (0xffff, 0xffff)
         self._nctx = 0
@@ -340,8 +353,10 @@ class Channel:
             self.link.txn('CloseChannel', *self.cid)
             self.link.__exit__(*exc)
 
-    def __call__(self, *a, **kw):
-        ok = self.send(*a, **kw)
+    def __call__(self, data):
+        if not isinstance(data, bytes):
+            raise Exception('D4 Channel %s: invalid data (must be bytes): %r' % (self.name, data))
+        ok = self.send(data)
         return self.retreive()
 
     def retreive(self, retries=6):
@@ -353,15 +368,13 @@ class Channel:
             if self._received:
                 return self._received
 
-    def send(self, *a, **kw):
-        data = self.protocol.encode(*a, **kw)
-        # _log.debug('%s: sending:\n%s', self.name, self.protocol.decode(data))
-        _log.log(15, '%s << %s', self.name, self.protocol.decode(data))
+    def send(self, data):
+        _log.debug('%s << %s', self.name, helpers.hexdump(data))
         return self.link.send(data, self)
 
     def on_received(self, data, header=None):
-        self._received = self.protocol.decode(data)
-        _log.log(15, '%s >> %s', self.name, self._received)
+        _log.debug('%s >> %s', self.name, data)
+        self._received = data
 
 
 def decode(packets):

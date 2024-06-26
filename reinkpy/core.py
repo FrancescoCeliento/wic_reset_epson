@@ -1,51 +1,54 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
-__all__ = ('Printer', 'FileTransport')
+__all__ = (
+    'Device',
+    'Driver',
+    'FileDevice',
+)
 
-from contextlib import ExitStack as _ExitStack
-import logging as _logging
+import functools, glob, logging, pathlib
+
+#logging.basicConfig(level=logging.INFO)
+logging.basicConfig(format="{levelname: <6} {name: <16} {message}", level=logging.INFO, style="{")
 
 
-class Printer:
-
-    def __init__(self, tsp, **kw):
-        self.tsp = tsp # transport, a binary-file-like object
-        self._log = _logging.getLogger('{0.__module__}.{0.__class__.__name__}'.format(self))
-
-    def __str__(self):
-        return '{0.__class__.__name__!s}({0.tsp!s})'.format(self)
-
-    def __enter__(self):
-        self._log.info('vvv__enter__vvv')
-        self._exit_stack = _ExitStack()
-        self._exit_stack.enter_context(self.tsp)
-        return self
-
-    def __exit__(self, *exc):
-        self._exit_stack.close()
-        self._log.info('^^^__exit__^^^')
+class Driver:
+    """Base Driver class"""
 
     @classmethod
-    def from_file(cls, device_file='/dev/usb/lp0'):
-        return cls(FileTransport(device_file))
+    def supports(cls, device) -> bool:
+        pass
 
-    bClass = 0x07
+
+class Device:
+
+    brand: str|None = None
+    model: str|None = None
+    serial_number: str|None = None
+
     @classmethod
-    def from_usb(cls, **kw):
-        from .usb import USBTransport
-        KEYS = ('bClass', 'iManufacturer', 'idVendor', 'iProduct', 'iSerialNumber',
-                'bInterfaceNumber', 'bAlternateSetting')
-        return cls(USBTransport.from_specs(**kw,
-                                           **dict((k, getattr(cls, k)) for k in KEYS
-                                                  if hasattr(cls, k) and k not in kw)))
+    def ifind(cls):
+        "Yield available printer devices"
+        for c in cls.__subclasses__():
+            yield from c.ifind()
 
-    def make_report(self): raise NotImplemented
-    def read_eeprom(self, pos): raise NotImplemented
-    def write_eeprom(self, pos, val): raise NotImplemented
-    def reset_ink(self): raise NotImplemented
-    def reset_waste(self): raise NotImplemented
+    @functools.cached_property
+    def driver(self):
+        "Best matching driver for this device"
+        s = sorted(((c.supports(self), c) for c in Driver.__subclasses__()), key=lambda t: -t[0])
+        if s: return s[0][1](self)
 
 
-class FileTransport:
+class FileDevice(Device):
+
+    @classmethod
+    def ifind(cls, globs=('/dev/lp?', '/dev/usb/lp?')):
+        for g in globs:
+            for p in glob.iglob(g):
+                p = pathlib.Path(p)
+                if p.is_char_device():
+                    # TODO: probe?
+                    #status = read()
+                    yield cls(p)
 
     def __init__(self, fname, mode='a+b'):
         self.fname = fname
@@ -70,5 +73,25 @@ class FileTransport:
     def read(self, size=None):
         return self._f.read(size)
 
+    def __eq__(self, o):
+        return (self.__class__ is o.__class__ and self.fname == o.fname and self.mode == o.mode)
+
     def __str__(self):
-        return '{0.__class__.__name__!s}({0.fname!r})'.format(self)
+        return '{0.__class__.__name__} [{0.fname}]'.format(self)
+
+    # def probe(self):
+    #     with self:
+    #         # IEEE 1284.1 RDC Request Summary cmd
+    #         # self.write(b'\xa5'       # START-PACKET
+    #         #            b'\x00\x03'   # PAYLOAD-LENGTH:>H
+    #         #            b'\x50'       # FLAG:component&reply
+    #         #            b'\x01\x00')  # RDC RS
+    #         r = self.read()
+    #     return r
+
+
+class NetworkDevice(Device):
+    # IPP? SNMP?
+
+    def __init__(self, ip):
+        self.ip = ip
