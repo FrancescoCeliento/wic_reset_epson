@@ -1,4 +1,16 @@
 [[EPSON]]
+models = ["NX100", "NX105", "SX100", "SX105", "TX100", "TX101", "TX102", "TX103", "TX104", "TX105", "TX106", "TX109"]
+mem = [
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x3FF
+
+[[EPSON]]
 rkey = 0x0001
 wkey = "Zvubnpsj"
 wkey1 = "Yutamori"
@@ -11,6 +23,57 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0005
+wkey = "Rqja1hm0"
+wkey1 = "Qpi`0gl/"
+models = ["EP-301", "PM-G860", "R280", "R285", "R290", "R295"]
+mem = [
+  { addr = [0x1C,0x1D] , desc = "Waste counter" },
+  { addr = [0x1E,0x1F] , desc = "Waste counter" , min = 0x789 , reset = [0x89,0x07] },
+  { addr = [0x20,0x21,0x2E,0x2F,0x30,0x31] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+
+[[EPSON]]
+rkey = 0x0005
+wkey = "Rqja1hm0"
+wkey1 = "Qpi`0gl/"
+models = ["PM-A840", "PM-A840S", "RX585", "RX595", "RX610", "RX615"]
+mem = [
+  { addr = [0x1C,0x1D] , desc = "Waste counter" },
+  { addr = [0x1E,0x1F] , desc = "Waste counter" , min = 0x789 , reset = [0x89,0x07] },
+  { addr = [0x20,0x21,0x2E,0x2F,0x30,0x31] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0006
+wkey = "banana\u0000\u0000"
+models = ["C90", "C91", "C92", "D92"]
+mem = [
+  { addr = [0x06,0x07,0x0A,0x0B,0x16,0x17,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x57] },
+  { addr = [0x0C,0x0D] , desc = "Waste counter" , min = 0x1F4 , reset = [0x01,0xF4] },
+  { addr = [0x36,0x37] , desc = "Waste counter" },
+]
+rlen = 1
+wlen = 2
+
+[[EPSON]]
+rkey = 0x0006
+wkey = "banana\u0000\u0000"
+models = ["C77", "C78"]
+mem = [
+  { addr = [0x06,0x07,0x0A,0x0B,0x34,0x35,0x36,0x37] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x00,0x04,0x57,0x00,0x00] },
+  { addr = [0x0C,0x0D] , desc = "Waste counter" , min = 0x1F4 , reset = [0x01,0xF4] },
+  { addr = [0x16,0x17] , desc = "Waste counter" },
+]
+rlen = 1
+wlen = 2
 
 [[EPSON]]
 rkey = 0x000D
@@ -47,6 +110,33 @@ wlen = 2
 mem_high = 0x3FF
 
 [[EPSON]]
+rkey = 0x0077
+wkey = "Lvsvnbzn"
+wkey1 = "Kurumaym"
+models = ["EP-702A", "PX650", "PX659", "TX650", "TX659"]
+mem = [
+  { addr = [0x1C,0x1D] , desc = "Waste counter" },
+  { addr = [0x1E,0x1F] , desc = "Waste counter" , min = 0x789 , reset = [0x89,0x07] },
+  { addr = [0x20,0x21,0x2E,0x2F,0x30,0x31] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0106
+wkey = "Ljkjnbes"
+wkey1 = "Kijimadr"
+models = ["C110", "C120", "D120", "PX-V780"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x7D0 , reset = [0xD0,0x07] },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x5C,0x11,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] },
+]
+rlen = 2
+wlen = 2
+
+[[EPSON]]
 rkey = 0x0143
 wkey = "Nfoubxbj"
 wkey1 = "Mentawai"
@@ -77,11 +167,115 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
+rkey = 0x0144
+wkey = "Hfscfsb+"
+wkey1 = "Gerbera*"
+models = ["ET-4500", "L575"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
+rkey = 0x0144
+wkey = "Hfscfsb+"
+wkey1 = "Gerbera*"
+models = ["ET-2500", "L375"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
 rkey = 0x0161
 wkey = "Fvdibsjt"
 wkey1 = "Eucharis"
 models = ["PX-S05", "WF-100"]
 mem = [
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0169
+wkey = "Hb{bojb+"
+wkey1 = "Gazania*"
+models = ["L455"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0169
+wkey = "Hb{bojb+"
+wkey1 = "Gazania*"
+models = ["L456"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x31] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+  { addr = [0x1E] , desc = "Waste counter" },
+  { addr = [0x22] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0282
+wkey = "Hfscfsb+"
+wkey1 = "Gerbera*"
+models = ["L565"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0282
+wkey = "Hfscfsb+"
+wkey1 = "Gerbera*"
+models = ["L566"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x31] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+  { addr = [0x1E] , desc = "Waste counter" },
+  { addr = [0x22] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0282
+wkey = "Hfscfsb+"
+wkey1 = "Gerbera*"
+models = ["L366"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x31] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+  { addr = [0x1E] , desc = "Waste counter" },
+  { addr = [0x22] , desc = "Waste counter" },
 ]
 rlen = 2
 wlen = 2
@@ -130,10 +324,38 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
+rkey = 0x0378
+wkey = "Nu/Obfcb"
+wkey1 = "Mt.Naeba"
+models = ["BX310FN", "ME Office 650", "TX510FN", "TX515FN", "WorkForce 310"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x7D0 , reset = [0xD0,0x07] },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x5C,0x11,0x00,0x00,0x00,0x00,0x00,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
 rkey = 0x0392
 wkey = "Svecfdjb"
 wkey1 = "Rudbecia"
 models = ["L120"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0395
+wkey = "Nbojokbv"
+wkey1 = "Maninjau"
+models = ["L405"]
 mem = [
   { addr = [0x18,0x19] , desc = "Waste counter" },
   { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
@@ -153,6 +375,36 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x7FF
+
+[[EPSON]]
+rkey = 0x0414
+wkey = "Gjsnjbob"
+wkey1 = "Firmiana"
+models = ["XP-540"]
+mem = [
+  { addr = [0x06] , desc = "Waste counter" },
+  { addr = [0x10,0x11] , desc = "Waste counter" },
+  { addr = [0x12,0x13] , desc = "Waste counter" },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x3FF
+
+[[EPSON]]
+rkey = 0x0414
+wkey = "Gjsnjbob"
+wkey1 = "Firmiana"
+models = ["XP-640", "XP-641", "XP-645"]
+mem = [
+  { addr = [0x06] , desc = "Waste counter" },
+  { addr = [0x10,0x11] , desc = "Waste counter" },
+  { addr = [0x12,0x13] , desc = "Waste counter" },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x3FF
 
 [[EPSON]]
 rkey = 0x0443
@@ -180,6 +432,21 @@ mem = [
 ]
 rlen = 1
 wlen = 2
+
+[[EPSON]]
+rkey = 0x0479
+wkey = "Hpttzqjv"
+wkey1 = "Gossypiu"
+models = ["XP-510"]
+mem = [
+  { addr = [0x06] , desc = "Waste counter" },
+  { addr = [0x10,0x11] , desc = "Waste counter" },
+  { addr = [0x12,0x13] , desc = "Waste counter" },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
 
 [[EPSON]]
 rkey = 0x0504
@@ -211,6 +478,44 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
+rkey = 0x0533
+wkey = "Qjohvjdv"
+wkey1 = "Pinguicu"
+models = ["ET-M16600", "ET-M16680", "M15140", "M15146", "M15147", "M15148", "M15180", "M15186", "M15187", "M15188"]
+mem = [
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
+rkey = 0x0543
+wkey = "BqqjLpho"
+wkey1 = "AppiKogn"
+models = ["B40W", "ME Office 80", "PX-201", "T40W", "WorkForce 40"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+
+[[EPSON]]
+rkey = 0x0543
+wkey = "BqqjLpho"
+wkey1 = "AppiKogn"
+models = ["BX600FW", "ME Office 700", "PX-601F", "SX600FW", "TX600FW", "WorkForce 600"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
 rkey = 0x0551
 wkey = "LpubHfef"
 wkey1 = "KotaGede"
@@ -225,6 +530,21 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0557
+wkey = "Bmuibfb/"
+wkey1 = "Althaea."
+models = ["XP-520"]
+mem = [
+  { addr = [0x06] , desc = "Waste counter" },
+  { addr = [0x10,0x11] , desc = "Waste counter" },
+  { addr = [0x12,0x13] , desc = "Waste counter" },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x3FF
 
 [[EPSON]]
 rkey = 0x0565
@@ -288,6 +608,48 @@ wlen = 2
 mem_high = 0x3FF
 
 [[EPSON]]
+rkey = 0x0624
+wkey = "Tfohhjhj"
+wkey1 = "Senggigi"
+models = ["BX320FW", "TX525FW", "Wo525", "WorkForce 520"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x34,0x35] , desc = "Waste counters (?)" , reset = [0xEF,0x3E,0x00,0x00,0x00,0x00,0x00,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0624
+wkey = "Tfohhjhj"
+wkey1 = "Senggigi"
+models = ["BX305FW", "BX305FW+", "ME Office 620", "TX320F", "TX325F", "Wo325", "WorkForce 320", "WorkForce 435"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x8FC , reset = [0xFC,0x08] },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" , min = 0xFA0 , reset = [0xA0,0x0F] },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x34,0x35] , desc = "Waste counters (?)" , reset = [0xF7,0x13,0x00,0x00,0x00,0x00,0x00,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0624
+wkey = "Tfohhjhj"
+wkey1 = "Senggigi"
+models = ["ME Office 560", "NX420", "SX420W", "SX425W", "TX420W"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x1C52 , reset = [0x52,0x1C] },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" , min = 0xFA0 , reset = [0xA0,0x0F] },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x34,0x35] , desc = "Waste counters (?)" , reset = [0xEF,0x3E,0x00,0x00,0x00,0x00,0x00,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
 rkey = 0x0625
 wkey = "opnvhjup"
 wkey1 = "nomugito"
@@ -325,6 +687,19 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0649
+wkey = "TijhbLho"
+wkey1 = "ShigaKgn"
+models = ["B30", "ME Office 70", "PX-101", "T30", "T33", "WorkForce 30"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x7D0 , reset = [0xD0,0x07] },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x5C,0x11,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] },
+]
+rlen = 2
+wlen = 2
 
 [[EPSON]]
 rkey = 0x0704
@@ -392,6 +767,20 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
+rkey = 0x0837
+wkey = "Utvxbcvl"
+wkey1 = "Tsuwabuk"
+models = ["BX630FW", "BX635FWD", "ME Office 940", "WorkForce 545", "WorkForce 645"]
+mem = [
+  { addr = [0x14,0x15] , desc = "Waste counter" },
+  { addr = [0x16,0x17] , desc = "Waste counter" },
+  { addr = [0x18,0x19,0x20,0x21,0x38] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
 rkey = 0x0849
 wkey = "Cjebebsj"
 wkey1 = "Bidadari"
@@ -444,6 +833,77 @@ mem = [
 ]
 rlen = 1
 wlen = 2
+
+[[EPSON]]
+rkey = 0x0928
+wkey = "Jsjthbsn"
+wkey1 = "Irisgarm"
+models = ["XP-530"]
+mem = [
+  { addr = [0x06] , desc = "Waste counter" },
+  { addr = [0x10,0x11] , desc = "Waste counter" },
+  { addr = [0x12,0x13] , desc = "Waste counter" },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x3FF
+
+[[EPSON]]
+rkey = 0x0941
+wkey = "Xblbupcj"
+wkey1 = "Wakatobi"
+models = ["M100", "M105"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0946
+wkey = "dspobsjb"
+wkey1 = "cronaria"
+models = ["EC-4020", "EC-4030", "EC-4040", "PX-M780F", "PX-M781F", "WF-4720", "WF-4723", "WF-4724", "WF-4725", "WF-4730", "WF-4733", "WF-4734", "WF-4735", "WF-4740", "WF-4743", "WF-4744", "WF-4745"]
+mem = [
+  { addr = [0x1C,0x2F,0x32,0x33,0x37] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x00,0x5E] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
+rkey = 0x0946
+wkey = "dspobsjb"
+wkey1 = "cronaria"
+models = ["PX-M680F", "WF-3720", "WF-3723", "WF-3725", "WF-3730", "WF-3733", "WF-3735"]
+mem = [
+  { addr = [0x1C,0x34,0x35,0x36,0x37] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x5E,0x5E] },
+  { addr = [0x2F] , desc = "Waste counter" },
+  { addr = [0x30,0x31] , desc = "Waste counter" },
+  { addr = [0x32,0x33] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
+rkey = 0x0950
+wkey = "Cjebebsj"
+wkey1 = "Bidadari"
+models = ["EW-052A", "XP-2100", "XP-2101", "XP-2105", "XP-2150", "XP-2151", "XP-2155"]
+mem = [
+  { addr = [0x1C,0x155,0x156,0x157,0x158] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x5E,0x5E] },
+  { addr = [0x150] , desc = "Waste counter" },
+  { addr = [0x151,0x152] , desc = "Waste counter" },
+  { addr = [0x153,0x154] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
 
 [[EPSON]]
 rkey = 0x0972
@@ -719,6 +1179,17 @@ rlen = 1
 wlen = 1
 
 [[EPSON]]
+rkey = 0x2810
+wkey = "ASAP\u0000\u0000\u0000\u0000"
+models = ["CX3700", "CX3800", "DX3800", "DX3850"]
+mem = [
+  { addr = [0x0C,0x0D] , desc = "Waste counter" , reset = [0xDC,0x05] },
+  { addr = [0x3A,0x3B] , desc = "Waste counters (?)" , reset = [0xA6,0x0E] },
+]
+rlen = 1
+wlen = 1
+
+[[EPSON]]
 rkey = 0x2A06
 wkey = "MuraMura"
 wkey1 = "Ltq`Ltq`"
@@ -837,6 +1308,23 @@ rlen = 1
 wlen = 1
 
 [[EPSON]]
+rkey = 0x364A
+wkey = "Bsboujgp"
+wkey1 = "Arantifo"
+models = ["ET-2850", "ET-2851", "ET-2853", "ET-2855", "L4260", "L4261", "L4263", "L4265", "L4266", "L4267", "L4268", "L4269", "Workforce ST-C2100"]
+mem = [
+  { addr = [0x1C,0x34,0x35,0x36,0x37,0xFF] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x5E,0x5E,0x5E] },
+  { addr = [0x2F] , desc = "Waste counter" },
+  { addr = [0x30,0x31] , desc = "Waste counter" },
+  { addr = [0x32,0x33] , desc = "Waste counter" },
+  { addr = [0xFC,0xFD] , desc = "Waste counter" },
+  { addr = [0xFE] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
 rkey = 0x370E
 models = ["PM-A900", "RX700"]
 mem = [
@@ -859,6 +1347,35 @@ wkey = "7W\u00a6\u0016\u00b7Vv\u00f7"
 models = ["SC-P700", "SC-P708", "SC-P900", "SC-P908", "SC-PX1V", "SC-PX1VL"]
 mem = [
   { addr = [0x40,0x43,0x44,0x48,0x1ED] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
+rkey = 0x394B
+wkey = "Ubncpsb/"
+wkey1 = "Tambora."
+models = ["WF-M1138"]
+mem = [
+  { addr = [0x150] , desc = "Waste counter" },
+  { addr = [0x151,0x152] , desc = "Waste counter" },
+  { addr = [0x155,0x156,0x157] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
+rkey = 0x394B
+wkey = "Ubncpsb/"
+wkey1 = "Tambora."
+models = ["WF-2110", "WF-2111", "WF-2118"]
+mem = [
+  { addr = [0x150] , desc = "Waste counter" },
+  { addr = [0x151,0x152] , desc = "Waste counter" },
+  { addr = [0x153,0x154] , desc = "Waste counter" },
+  { addr = [0x155,0x156,0x157,0x158] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E] },
 ]
 rlen = 2
 wlen = 2
@@ -889,6 +1406,28 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x450E
+models = ["PX-5500"]
+mem = [
+  { addr = [0x24,0x25] , desc = "Waste counter" },
+  { addr = [0x26,0x27] , desc = "Waste counter" },
+  { addr = [0x4A,0x4B,0x4C,0x4D,0x4E,0x4F] , desc = "Waste counters (?)" },
+]
+rlen = 1
+wlen = 1
+
+[[EPSON]]
+rkey = 0x450E
+models = ["PX-G5000", "PX-G5100", "R1800"]
+mem = [
+  { addr = [0x24,0x25] , desc = "Waste counter" , min = 0x6F1 , reset = [0xF1,0x06] },
+  { addr = [0x26,0x27] , desc = "Waste counter" , min = 0x6F1 },
+  { addr = [0x4A,0x4B,0x4C,0x4D,0x4E,0x4F] , desc = "Waste counters (?)" , reset = [0xF1,0x06,0x00,0x00,0x00,0x00] },
+]
+rlen = 1
+wlen = 1
 
 [[EPSON]]
 rkey = 0x4513
@@ -1080,6 +1619,18 @@ rlen = 1
 wlen = 1
 
 [[EPSON]]
+rkey = 0x5411
+wkey = "Opabxbpt"
+wkey1 = "No`awaos"
+models = ["CX3900", "CX4000", "DX4000", "DX4050"]
+mem = [
+  { addr = [0x06,0x28,0x29,0x3A,0x3B] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0xA6,0x0E] },
+  { addr = [0x0C,0x0D] , desc = "Waste counter" , min = 0x5DC , reset = [0xDC,0x05] },
+]
+rlen = 1
+wlen = 1
+
+[[EPSON]]
 rkey = 0x560F
 wkey = "Iblvopsj"
 wkey1 = "Hakunori"
@@ -1120,6 +1671,20 @@ mem = [
 ]
 rlen = 2
 wlen = 2
+
+[[EPSON]]
+rkey = 0x5F11
+wkey = "Utvhbjlf"
+wkey1 = "Tsugaike"
+models = ["PM-A820", "RX560", "RX565", "RX580", "RX590"]
+mem = [
+  { addr = [0x1C,0x1D] , desc = "Waste counter" },
+  { addr = [0x1E,0x1F] , desc = "Waste counter" },
+  { addr = [0x20,0x21,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
 
 [[EPSON]]
 rkey = 0x600F
@@ -1205,31 +1770,54 @@ rlen = 2
 wlen = 2
 
 [[EPSON]]
-rkey = 0x0005
-wkey = "Rqja1hm0"
-wkey1 = "Qpi`0gl/"
-models = ["EP-301", "PM-A840", "PM-A840S", "PM-G860", "R280", "R285", "R290", "R295", "RX585", "RX595", "RX610", "RX615"]
+models = ["L100"]
 mem = [
-  { addr = [0x1C,0x1D] , desc = "Waste counter" },
-  { addr = [0x1E,0x1F] , desc = "Waste counter" , min = 0x789 , reset = [0x89,0x07] },
-  { addr = [0x20,0x21,0x2E,0x2F,0x30,0x31] , desc = "Waste counters (?)" },
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+  { addr = [0x23D,0x23E,0x23F,0x240] , desc = "Waste counter" },
 ]
 rlen = 2
 wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
 
 [[EPSON]]
-rkey = 0x0006
-wkey = "banana\u0000\u0000"
-models = ["C77", "C78", "C90", "C91", "C92", "D92"]
+models = ["L200"]
 mem = [
-  { addr = [0x06,0x07,0x0A,0x0B,0x34,0x35,0x36,0x37] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x00,0x04,0x57,0x00,0x00] },
-  { addr = [0x0C,0x0D] , desc = "Waste counter" , min = 0x1F4 , reset = [0x01,0xF4] },
-  { addr = [0x16,0x17] , desc = "Waste counter" },
-  { addr = [0x06,0x07,0x0A,0x0B,0x16,0x17,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x00,0x00,0x00,0x04,0x57] },
-  { addr = [0x36,0x37] , desc = "Waste counter" },
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+  { addr = [0x23D,0x23E,0x23F,0x240] , desc = "Waste counter" },
 ]
-rlen = 1
+rlen = 2
 wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
+
+[[EPSON]]
+models = ["ME-300"]
+mem = [
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
+
+[[EPSON]]
+models = ["NX110", "NX115", "SX110", "SX115", "SX117", "SX119", "TX110", "TX111", "TX112", "TX113", "TX114", "TX115", "TX117", "TX119"]
+mem = [
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
 
 [[EPSON]]
 rkey = 0x0065
@@ -1261,18 +1849,17 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x0144
-wkey = "Hfscfsb+"
-wkey1 = "Gerbera*"
-models = ["ET-2500", "ET-4500", "L375", "L575"]
+rkey = 0x0077
+wkey = "Lvsvnbzn"
+wkey1 = "Kurumaym"
+models = ["Artisan 50", "EP-302", "P50", "R330", "T50", "T59", "T60"]
 mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
-  { addr = [0x1E] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D] , desc = "Waste counter" },
+  { addr = [0x1E,0x1F] , desc = "Waste counter" , min = 0x789 , reset = [0x89,0x07] },
+  { addr = [0x20,0x21,0x2E,0x2F,0x30,0x31] , desc = "Waste counters (?)" },
 ]
 rlen = 2
 wlen = 2
-mem_high = 0x1FF
 
 [[EPSON]]
 rkey = 0x0145
@@ -1296,23 +1883,6 @@ mem = [
   { addr = [0x1E,0x1F] , desc = "Waste counter" },
   { addr = [0x20,0x21,0x4E,0x4F] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E] },
   { addr = [0x4D] , desc = "Waste counter" },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
-rkey = 0x0169
-wkey = "Hb{bojb+"
-wkey1 = "Gazania*"
-models = ["L455", "L456"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
-  { addr = [0x1E] , desc = "Waste counter" },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x31] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
-  { addr = [0x22] , desc = "Waste counter" },
 ]
 rlen = 2
 wlen = 2
@@ -1343,6 +1913,36 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x7FF
+
+[[EPSON]]
+rkey = 0x0378
+wkey = "Nu/Obfcb"
+wkey1 = "Mt.Naeba"
+models = ["BX610FW", "NX510", "NX515", "PX-502A", "PX-602F", "SX510", "SX515", "SX610FW", "TX550", "TX610FW", "Wo615", "WorkForce 610"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x34,0x35] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0395
+wkey = "Nbojokbv"
+wkey1 = "Maninjau"
+models = ["ET-2610", "L3060", "L396"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+  { addr = [0x22] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
 
 [[EPSON]]
 rkey = 0x0474
@@ -1383,20 +1983,6 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x7FF
-
-[[EPSON]]
-rkey = 0x0543
-wkey = "BqqjLpho"
-wkey1 = "AppiKogn"
-models = ["B40W", "BX600FW", "ME Office 700", "ME Office 80", "PX-201", "PX-601F", "SX600FW", "T40W", "TX600FW", "WorkForce 40", "WorkForce 600"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
 
 [[EPSON]]
 rkey = 0x0553
@@ -1470,6 +2056,51 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
+rkey = 0x0810
+wkey = "Tjobcvoh"
+wkey1 = "Sinabung"
+models = ["L386", "L486"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x31] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+  { addr = [0x1E] , desc = "Waste counter" },
+  { addr = [0x22] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0837
+wkey = "Utvxbcvl"
+wkey1 = "Tsuwabuk"
+models = ["BX535WD", "NX530", "NX635", "PX-204", "PX-504A", "SX535WD"]
+mem = [
+  { addr = [0x14,0x15] , desc = "Waste counter" },
+  { addr = [0x16,0x17] , desc = "Waste counter" },
+  { addr = [0x18,0x19,0x20,0x21,0x38] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0849
+wkey = "Bsboujgp"
+wkey1 = "Arantifo"
+models = ["ET-2700", "ET-2701", "ET-2702", "ET-2703", "ET-2704", "ET-2705", "ET-2706", "ET-2708", "ET-2750", "ET-2751", "ET-2756", "ET-2760", "EW-M571T", "L4150", "L4151", "L4152", "L4153", "L4154", "L4155", "L4156", "L4157", "L4158", "L4159", "L4160", "L4161", "L4162", "L4163", "L4164", "L4165", "L4166", "L4167", "L4168", "L4169", "Workforce ST-2000"]
+mem = [
+  { addr = [0x1C,0x34,0x35,0x36,0x37] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x5E,0x5E] },
+  { addr = [0x2F] , desc = "Waste counter" },
+  { addr = [0x30,0x31] , desc = "Waste counter" },
+  { addr = [0x32,0x33] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
 rkey = 0x0877
 wkey = "Dbuumfzb"
 wkey1 = "Cattleya"
@@ -1509,20 +2140,19 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
-rkey = 0x0946
-wkey = "dspobsjb"
-wkey1 = "cronaria"
-models = ["EC-4020", "EC-4030", "EC-4040", "PX-M680F", "PX-M780F", "PX-M781F", "WF-3720", "WF-3723", "WF-3725", "WF-3730", "WF-3733", "WF-3735", "WF-4720", "WF-4723", "WF-4724", "WF-4725", "WF-4730", "WF-4733", "WF-4734", "WF-4735", "WF-4740", "WF-4743", "WF-4744", "WF-4745"]
+rkey = 0x0928
+wkey = "Jsjthbsn"
+wkey1 = "Irisgarm"
+models = ["EP-10VA", "EP-978A3", "XP-960"]
 mem = [
-  { addr = [0x1C,0x34,0x35,0x36,0x37] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x5E,0x5E] },
-  { addr = [0x2F] , desc = "Waste counter" },
-  { addr = [0x30,0x31] , desc = "Waste counter" },
-  { addr = [0x32,0x33] , desc = "Waste counter" },
-  { addr = [0x1C,0x2F,0x32,0x33,0x37] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x00,0x5E] },
+  { addr = [0x06] , desc = "Waste counter" },
+  { addr = [0x10,0x11] , desc = "Waste counter" },
+  { addr = [0x12,0x13] , desc = "Waste counter" },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
 ]
 rlen = 2
 wlen = 2
-mem_high = 0x7FF
+mem_high = 0x3FF
 
 [[EPSON]]
 rkey = 0x0953
@@ -1588,28 +2218,25 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x394B
-wkey = "Ubncpsb/"
-wkey1 = "Tambora."
-models = ["WF-2110", "WF-2111", "WF-2118", "WF-M1138"]
+rkey = 0x5411
+wkey = "Opabxbpt"
+wkey1 = "No`awaos"
+models = ["CX4900", "CX5000", "CX5900", "CX6000", "DX5000", "DX5050", "DX6000", "DX6050", "PX-A720"]
 mem = [
-  { addr = [0x150] , desc = "Waste counter" },
-  { addr = [0x151,0x152] , desc = "Waste counter" },
-  { addr = [0x153,0x154] , desc = "Waste counter" },
-  { addr = [0x155,0x156,0x157,0x158] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E] },
-  { addr = [0x155,0x156,0x157] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x06,0x28,0x29,0x3A,0x3B] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0xA6,0x0E] },
+  { addr = [0x0C,0x0D] , desc = "Waste counter" , min = 0x5DC , reset = [0xDC,0x05] },
 ]
-rlen = 2
-wlen = 2
-mem_high = 0x7FF
+rlen = 1
+wlen = 1
 
 [[EPSON]]
-rkey = 0x450E
-models = ["PX-5500", "PX-G5000", "PX-G5100", "R1800"]
+rkey = 0x5411
+wkey = "Opabxbpt"
+wkey1 = "No`awaos"
+models = ["CX2800", "CX2900", "ME-200"]
 mem = [
-  { addr = [0x24,0x25] , desc = "Waste counter" , reset = [0xF1,0x06] },
-  { addr = [0x26,0x27] , desc = "Waste counter" },
-  { addr = [0x4A,0x4B,0x4C,0x4D,0x4E,0x4F] , desc = "Waste counters (?)" , reset = [0xF1,0x06,0x00,0x00,0x00,0x00] },
+  { addr = [0x06,0x28,0x29,0x3A,0x3B] , desc = "Waste counters (?)" },
+  { addr = [0x0C,0x0D] , desc = "Waste counter" },
 ]
 rlen = 1
 wlen = 1
@@ -1627,17 +2254,31 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x0077
-wkey = "Lvsvnbzn"
-wkey1 = "Kurumaym"
-models = ["Artisan 50", "EP-302", "EP-702A", "P50", "PX650", "PX659", "R330", "T50", "T59", "T60", "TX650", "TX659"]
+rkey = 0x5F11
+wkey = "Utvhbjlf"
+wkey1 = "Tsugaike"
+models = ["PM-D870", "PM-G850", "R260", "R265", "R270", "R360", "R380", "R390"]
 mem = [
   { addr = [0x1C,0x1D] , desc = "Waste counter" },
-  { addr = [0x1E,0x1F] , desc = "Waste counter" , min = 0x789 , reset = [0x89,0x07] },
-  { addr = [0x20,0x21,0x2E,0x2F,0x30,0x31] , desc = "Waste counters (?)" },
+  { addr = [0x1E,0x1F] , desc = "Waste counter" },
+  { addr = [0x20,0x21,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" },
 ]
 rlen = 2
 wlen = 2
+
+[[EPSON]]
+rkey = 0x0106
+wkey = "Ljkjnbes"
+wkey1 = "Kijimadr"
+models = ["CX7300", "CX7400", "CX8300", "CX8400", "CX9300F", "CX9400F", "DX7400", "DX7450", "DX8400", "DX8450", "DX9400", "DX9450", "PX-FA700", "WorkForce 500"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x1356 , reset = [0x13,0x56] },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x2A,0xFA,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
 
 [[EPSON]]
 rkey = 0x0264
@@ -1651,20 +2292,6 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x0378
-wkey = "Nu/Obfcb"
-wkey1 = "Mt.Naeba"
-models = ["BX310FN", "BX610FW", "ME Office 650", "NX510", "NX515", "PX-502A", "PX-602F", "SX510", "SX515", "SX610FW", "TX510FN", "TX515FN", "TX550", "TX610FW", "Wo615", "WorkForce 310", "WorkForce 610"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x7D0 , reset = [0xD0,0x07] },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x5C,0x11,0x00,0x00,0x00,0x00,0x00,0x00] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
 rkey = 0x0388
 wkey = "Cbtjmjdp"
 wkey1 = "Basilico"
@@ -1676,21 +2303,19 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x0395
-wkey = "Nbojokbv"
-wkey1 = "Maninjau"
-models = ["ET-2610", "L3060", "L396", "L405"]
+rkey = 0x0414
+wkey = "Gjsnjbob"
+wkey1 = "Firmiana"
+models = ["EP-709A", "EP-979A3", "XP-900"]
 mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E] },
-  { addr = [0x1E] , desc = "Waste counter" },
-  { addr = [0x22] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x06] , desc = "Waste counter" },
+  { addr = [0x10,0x11] , desc = "Waste counter" },
+  { addr = [0x12,0x13] , desc = "Waste counter" },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
 ]
 rlen = 2
 wlen = 2
-mem_high = 0x1FF
+mem_high = 0x3FF
 
 [[EPSON]]
 rkey = 0x0518
@@ -1704,20 +2329,6 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x0624
-wkey = "Tfohhjhj"
-wkey1 = "Senggigi"
-models = ["BX305FW", "BX305FW+", "BX320FW", "ME Office 560", "ME Office 620", "NX420", "SX420W", "SX425W", "TX320F", "TX325F", "TX420W", "TX525FW", "Wo325", "Wo525", "WorkForce 320", "WorkForce 435", "WorkForce 520"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x8FC , reset = [0xFC,0x08] },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" , min = 0xFA0 , reset = [0xA0,0x0F] },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x34,0x35] , desc = "Waste counters (?)" , reset = [0xF7,0x13,0x00,0x00,0x00,0x00,0x00,0x00] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
 rkey = 0x0768
 wkey = "Plvjcvlj"
 wkey1 = "Okuibuki"
@@ -1725,6 +2336,22 @@ models = ["K100", "K101", "K105", "K200", "K201", "K205", "K300", "K301", "K305"
 mem = [
   { addr = [0x14,0x15] , desc = "Waste counter" },
   { addr = [0x18,0x19] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0810
+wkey = "Tjobcvoh"
+wkey1 = "Sinabung"
+models = ["EP-M570T", "L3050", "L3070", "L382"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+  { addr = [0x22] , desc = "Waste counter" },
 ]
 rlen = 2
 wlen = 2
@@ -1746,20 +2373,6 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x0837
-wkey = "Utvxbcvl"
-wkey1 = "Tsuwabuk"
-models = ["BX535WD", "BX630FW", "BX635FWD", "ME Office 940", "NX530", "NX635", "PX-204", "PX-504A", "SX535WD", "WorkForce 545", "WorkForce 645"]
-mem = [
-  { addr = [0x14,0x15] , desc = "Waste counter" },
-  { addr = [0x16,0x17] , desc = "Waste counter" },
-  { addr = [0x18,0x19,0x20,0x21,0x38] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
 rkey = 0x0855
 wkey = "THufo{bo"
 wkey1 = "SGtenzan"
@@ -1773,17 +2386,16 @@ rlen = 2
 wlen = 2
 
 [[EPSON]]
-rkey = 0x5F11
-wkey = "Utvhbjlf"
-wkey1 = "Tsugaike"
-models = ["PM-A820", "PM-D870", "PM-G850", "R260", "R265", "R270", "R360", "R380", "R390", "RX560", "RX565", "RX580", "RX590"]
+rkey = 0x364A
+wkey = "Bsboujgp"
+wkey1 = "Arantifo"
+models = ["ET-3800", "ET-3830", "ET-3850", "ET-4850", "EW-M634T", "EW-M674FT", "L6260", "L6266", "L6268", "L6269", "L6270", "L6276", "L6278", "L6279", "L6290", "L6296", "L6298", "L6299", "Workforce ST-C4100"]
 mem = [
-  { addr = [0x1C,0x1D] , desc = "Waste counter" },
-  { addr = [0x1E,0x1F] , desc = "Waste counter" },
-  { addr = [0x20,0x21,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" },
+  { addr = [0x1C,0x2F,0x32,0x33,0x37] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x00,0x5E] },
 ]
 rlen = 2
 wlen = 2
+mem_high = 0x7FF
 
 [[EPSON]]
 rkey = 0x0028
@@ -1795,20 +2407,6 @@ mem = [
   { addr = [0x10,0x11] , desc = "Waste counter" },
   { addr = [0x12,0x13] , desc = "Waste counter" },
   { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
-rkey = 0x0106
-wkey = "Ljkjnbes"
-wkey1 = "Kijimadr"
-models = ["C110", "C120", "CX7300", "CX7400", "CX8300", "CX8400", "CX9300F", "CX9400F", "D120", "DX7400", "DX7450", "DX8400", "DX8450", "DX9400", "DX9450", "PX-FA700", "PX-V780", "WorkForce 500"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x1356 , reset = [0x13,0x56] },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x2A,0xFA,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] },
 ]
 rlen = 2
 wlen = 2
@@ -1831,6 +2429,22 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
+rkey = 0x0282
+wkey = "Hfscfsb+"
+wkey1 = "Gerbera*"
+models = ["L132", "L222", "L312", "L362", "L364"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x8B] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+  { addr = [0x1E] , desc = "Waste counter" },
+  { addr = [0x22] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
 rkey = 0x0539
 wkey = "Hfsbojvn"
 wkey1 = "Geranium"
@@ -1843,29 +2457,52 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
-rkey = 0x0987
-wkey = "Mbwfoefs"
-wkey1 = "Lavender"
-models = ["PX-M7050", "PX-M7050FP", "PX-S7050", "PX-S7050PS", "WF-8010", "WF-8090", "WF-8093", "WF-8510", "WF-8590", "WF-8593"]
+rkey = 0x0649
+wkey = "TijhbLho"
+wkey1 = "ShigaKgn"
+models = ["NX200", "NX205", "NX400", "NX405", "NX409", "NX410", "NX415", "NX419", "NXSX209", "PX-501A", "PX-A640", "PX-A740", "SX200", "SX205", "SX209", "SX400", "SX405", "SX409", "SX410", "SX415", "SX419", "TX200", "TX205", "TX209", "TX400", "TX405", "TX409", "TX410", "TX415", "TX419"]
 mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x1356 , reset = [0x13,0x56] },
+  { addr = [0x1A,0x1B] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x2A,0xFA,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0928
+wkey = "Jsjthbsn"
+wkey1 = "Irisgarm"
+models = ["EP-708A", "EP-808A", "XP-630", "XP-631", "XP-635", "XP-830"]
+mem = [
+  { addr = [0x06] , desc = "Waste counter (?)" },
+  { addr = [0x10,0x11] , desc = "Waste counter (main pad)", max = 0x2102 },
+  { addr = [0x12,0x13] , desc = "Waste counter (platen pad)", max = 0x0D2A },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x3FF
+
+[[EPSON]]
+rkey = 0x0950
+wkey = "Cjebebsj"
+wkey1 = "Bidadari"
+models = ["EW-452A", "WF-2810", "WF-2811", "WF-2815", "WF-2820", "WF-2821", "WF-2825", "WF-2830", "WF-2831", "WF-2835", "WF-2840", "WF-2841", "WF-2845", "WF-2850", "WF-2851", "WF-2855", "WF-2870", "WF-2871", "WF-2875", "XP-3100", "XP-3101", "XP-3105", "XP-3150", "XP-3151", "XP-3155", "XP-4100", "XP-4101", "XP-4105", "XP-4150", "XP-4151", "XP-4155"]
+mem = [
+  { addr = [0x1C,0x150,0x153,0x154,0x158] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x00,0x5E] },
 ]
 rlen = 2
 wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x364A
-wkey = "Bsboujgp"
-wkey1 = "Arantifo"
-models = ["ET-2850", "ET-2851", "ET-2853", "ET-2855", "ET-3800", "ET-3830", "ET-3850", "ET-4850", "EW-M634T", "EW-M674FT", "L4260", "L4261", "L4263", "L4265", "L4266", "L4267", "L4268", "L4269", "L6260", "L6266", "L6268", "L6269", "L6270", "L6276", "L6278", "L6279", "L6290", "L6296", "L6298", "L6299", "Workforce ST-C2100", "Workforce ST-C4100"]
+rkey = 0x0987
+wkey = "Mbwfoefs"
+wkey1 = "Lavender"
+models = ["PX-M7050", "PX-M7050FP", "PX-S7050", "PX-S7050PS", "WF-8010", "WF-8090", "WF-8093", "WF-8510", "WF-8590", "WF-8593"]
 mem = [
-  { addr = [0x1C,0x34,0x35,0x36,0x37,0xFF] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x5E,0x5E,0x5E] },
-  { addr = [0x2F] , desc = "Waste counter" },
-  { addr = [0x30,0x31] , desc = "Waste counter" },
-  { addr = [0x32,0x33] , desc = "Waste counter" },
-  { addr = [0xFC,0xFD] , desc = "Waste counter" },
-  { addr = [0xFE] , desc = "Waste counter" },
-  { addr = [0x1C,0x2F,0x32,0x33,0x37] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x00,0x5E] },
 ]
 rlen = 2
 wlen = 2
@@ -1888,32 +2525,18 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
-rkey = 0x0414
-wkey = "Gjsnjbob"
-wkey1 = "Firmiana"
-models = ["EP-709A", "EP-979A3", "XP-540", "XP-640", "XP-641", "XP-645", "XP-900"]
+rkey = 0x0282
+wkey = "Hfscfsb+"
+wkey1 = "Gerbera*"
+models = ["L130", "L220", "L310", "L360", "L365"]
 mem = [
-  { addr = [0x06] , desc = "Waste counter" },
-  { addr = [0x10,0x11] , desc = "Waste counter" },
-  { addr = [0x12,0x13] , desc = "Waste counter" },
-  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
 ]
 rlen = 2
 wlen = 2
-mem_high = 0x3FF
-
-[[EPSON]]
-rkey = 0x0649
-wkey = "TijhbLho"
-wkey1 = "ShigaKgn"
-models = ["B30", "ME Office 70", "NX200", "NX205", "NX400", "NX405", "NX409", "NX410", "NX415", "NX419", "NXSX209", "PX-101", "PX-501A", "PX-A640", "PX-A740", "SX200", "SX205", "SX209", "SX400", "SX405", "SX409", "SX410", "SX415", "SX419", "T30", "T33", "TX200", "TX205", "TX209", "TX400", "TX405", "TX409", "TX410", "TX415", "TX419", "WorkForce 30"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" , min = 0x1356 , reset = [0x13,0x56] },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x30,0x31,0x32,0x33,0x34,0x35] , desc = "Waste counters (?)" , reset = [0x2A,0xFA,0x00,0x00,0x00,0x00,0x00,0x00,0x00,0x00] },
-]
-rlen = 2
-wlen = 2
+mem_high = 0x1FF
 
 [[EPSON]]
 rkey = 0x0797
@@ -1931,20 +2554,32 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x0950
-wkey = "Cjebebsj"
-wkey1 = "Bidadari"
-models = ["EW-052A", "EW-452A", "WF-2810", "WF-2811", "WF-2815", "WF-2820", "WF-2821", "WF-2825", "WF-2830", "WF-2831", "WF-2835", "WF-2840", "WF-2841", "WF-2845", "WF-2850", "WF-2851", "WF-2855", "WF-2870", "WF-2871", "WF-2875", "XP-2100", "XP-2101", "XP-2105", "XP-2150", "XP-2151", "XP-2155", "XP-3100", "XP-3101", "XP-3105", "XP-3150", "XP-3151", "XP-3155", "XP-4100", "XP-4101", "XP-4105", "XP-4150", "XP-4151", "XP-4155"]
+rkey = 0x0810
+wkey = "Tjobcvoh"
+wkey1 = "Sinabung"
+models = ["ET-2600", "ET-2650", "L380", "L385", "L395", "L485", "L495"]
 mem = [
-  { addr = [0x1C,0x150,0x153,0x154,0x158] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x00,0x5E] },
-  { addr = [0x1C,0x155,0x156,0x157,0x158] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x5E,0x5E] },
-  { addr = [0x150] , desc = "Waste counter" },
-  { addr = [0x151,0x152] , desc = "Waste counter" },
-  { addr = [0x153,0x154] , desc = "Waste counter" },
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
 ]
 rlen = 2
 wlen = 2
-mem_high = 0x7FF
+mem_high = 0x1FF
+
+[[EPSON]]
+rkey = 0x0941
+wkey = "Xblbupcj"
+wkey1 = "Wakatobi"
+models = ["L110", "L111", "L210", "L211", "L300", "L301", "L303", "L308", "L350", "L351", "L353", "L355", "L358", "L550", "L551", "L552", "L553", "L554", "L555", "L556", "L557", "L558", "L559", "M200", "M205"]
+mem = [
+  { addr = [0x18,0x19] , desc = "Waste counter" },
+  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
+  { addr = [0x1E] , desc = "Waste counter" },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
 
 [[EPSON]]
 rkey = 0x0981
@@ -1970,6 +2605,17 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
+rkey = 0x2810
+wkey = "ASAP\u0000\u0000\u0000\u0000"
+models = ["CX3300", "CX3400", "CX4100", "CX4200", "CX4700", "CX4800", "CX7700", "CX7800", "DX4200", "DX4250", "DX4800", "DX4850", "R240", "R245", "R250", "RX520", "RX530"]
+mem = [
+  { addr = [0x0C,0x0D] , desc = "Waste counter" },
+  { addr = [0x3A,0x3B] , desc = "Waste counters (?)" },
+]
+rlen = 1
+wlen = 1
+
+[[EPSON]]
 rkey = 0x364A
 wkey = "Nbsjcbzb"
 wkey1 = "Maribaya"
@@ -1987,16 +2633,91 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
-rkey = 0x5411
-wkey = "Opabxbpt"
-wkey1 = "No`awaos"
-models = ["CX2800", "CX2900", "CX3900", "CX4000", "CX4900", "CX5000", "CX5900", "CX6000", "DX4000", "DX4050", "DX5000", "DX5050", "DX6000", "DX6050", "ME-200", "PX-A720"]
+models = ["S22"]
 mem = [
-  { addr = [0x06,0x28,0x29,0x3A,0x3B] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0xA6,0x0E] },
-  { addr = [0x0C,0x0D] , desc = "Waste counter" , min = 0x5DC , reset = [0xDC,0x05] },
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
 ]
-rlen = 1
-wlen = 1
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
+
+[[EPSON]]
+models = ["SX125"]
+mem = [
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
+
+[[EPSON]]
+models = ["SX130"]
+mem = [
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
+
+[[EPSON]]
+models = ["ME-32", "ME-33", "ME-35", "T12", "T13", "T22", "T25"]
+mem = [
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
+
+[[EPSON]]
+models = ["NX125", "NX127", "TX120", "TX121", "TX125", "TXNX120"]
+mem = [
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
+
+[[EPSON]]
+models = ["ME-320", "ME-330", "ME-340", "NX130", "NXTX130", "TX130", "TX133", "TX135"]
+mem = [
+  { addr = [0x214,0x215] , desc = "Waste counter" },
+  { addr = [0x216,0x217] , desc = "Waste counter" },
+  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
+]
+rlen = 2
+wlen = 2
+mem_low = 0x100
+mem_high = 0x2FF
+
+[[EPSON]]
+rkey = 0x0479
+wkey = "Hpttzqjv"
+wkey1 = "Gossypiu"
+models = ["EP-306", "EP-706A", "EP-776A", "EP-806A", "EP-906A", "EP-906F", "XP-55", "XP-610", "XP-611", "XP-615", "XP-710", "XP-810"]
+mem = [
+  { addr = [0x06] , desc = "Waste counter" },
+  { addr = [0x10,0x11] , desc = "Waste counter" },
+  { addr = [0x12,0x13] , desc = "Waste counter" },
+  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x1FF
 
 [[EPSON]]
 rkey = 0x0501
@@ -2058,6 +2779,18 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
+rkey = 0x0849
+wkey = "Bsboujgp"
+wkey1 = "Arantifo"
+models = ["ET-3700", "ET-3710", "ET-3750", "ET-3760", "ET-4750", "ET-4760", "EW-M530F", "EW-M630T", "EW-M670FT", "L6160", "L6161", "L6168", "L6170", "L6171", "L6178", "L6190", "L6191", "L6198", "WF-2860", "WF-2861", "WF-2865", "WF-2880", "WF-2881", "WF-2885", "Workforce ST-3000", "Workforce ST-4000", "Workforce ST-5000", "Workforce ST-7000", "XP-5100", "XP-5101", "XP-5105", "XP-5150", "XP-5151", "XP-5155"]
+mem = [
+  { addr = [0x1C,0x2F,0x32,0x33,0x37] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x00,0x5E] },
+]
+rlen = 2
+wlen = 2
+mem_high = 0x7FF
+
+[[EPSON]]
 rkey = 0x0881
 wkey = "Xblbupcj"
 wkey1 = "Wakatobi"
@@ -2074,65 +2807,10 @@ wlen = 2
 mem_high = 0x1FF
 
 [[EPSON]]
-rkey = 0x0941
-wkey = "Xblbupcj"
-wkey1 = "Wakatobi"
-models = ["L110", "L111", "L210", "L211", "L300", "L301", "L303", "L308", "L350", "L351", "L353", "L355", "L358", "L550", "L551", "L552", "L553", "L554", "L555", "L556", "L557", "L558", "L559", "M100", "M105", "M200", "M205"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
-  { addr = [0x1E] , desc = "Waste counter" },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
-rkey = 0x2810
-wkey = "ASAP\u0000\u0000\u0000\u0000"
-models = ["CX3300", "CX3400", "CX3700", "CX3800", "CX4100", "CX4200", "CX4700", "CX4800", "CX7700", "CX7800", "DX3800", "DX3850", "DX4200", "DX4250", "DX4800", "DX4850", "R240", "R245", "R250", "RX520", "RX530"]
-mem = [
-  { addr = [0x0C,0x0D] , desc = "Waste counter" , reset = [0xDC,0x05] },
-  { addr = [0x3A,0x3B] , desc = "Waste counters (?)" , reset = [0xA6,0x0E] },
-]
-rlen = 1
-wlen = 1
-
-[[EPSON]]
-rkey = 0x0479
-wkey = "Hpttzqjv"
-wkey1 = "Gossypiu"
-models = ["EP-306", "EP-706A", "EP-776A", "EP-806A", "EP-906A", "EP-906F", "XP-510", "XP-55", "XP-610", "XP-611", "XP-615", "XP-710", "XP-810"]
-mem = [
-  { addr = [0x06] , desc = "Waste counter" },
-  { addr = [0x10,0x11] , desc = "Waste counter" },
-  { addr = [0x12,0x13] , desc = "Waste counter" },
-  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
-rkey = 0x0928
-wkey = "Jsjthbsn"
-wkey1 = "Irisgarm"
-models = ["EP-10VA", "EP-708A", "EP-808A", "EP-978A3", "XP-530", "XP-630", "XP-631", "XP-635", "XP-830", "XP-960"]
-mem = [
-  { addr = [0x06] , desc = "Waste counter (?)" },
-  { addr = [0x10,0x11] , desc = "Waste counter (main pad)", max = 0x2102 },
-  { addr = [0x12,0x13] , desc = "Waste counter (platen pad)", max = 0x0D2A },
-  { addr = [0x14,0x15,0x34,0x35,0x1ED] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x3FF
-
-[[EPSON]]
 rkey = 0x0533
 wkey = "Qjohvjdv"
 wkey1 = "Pinguicu"
-models = ["EC-C7000", "ET-16150", "ET-16600", "ET-16650", "ET-16680", "ET-5800", "ET-5850", "ET-5880", "ET-M16600", "ET-M16680", "EW-M873T", "L11160", "L11168", "L15150", "L15158", "L15160", "L15168", "L15180", "L15188", "L6550", "L6551", "L6558", "L6570", "L6571", "L6578", "L6580", "L6581", "L6588", "M15140", "M15146", "M15147", "M15148", "M15180", "M15186", "M15187", "M15188", "PX-M6010F", "PX-M6011F", "PX-M6711FT", "PX-M6712FT", "PX-M791FT", "PX-S6710T", "ST-C8000", "ST-C8090", "WF-7310", "WF-7311", "WF-7315", "WF-7820", "WF-7828", "WF-7830", "WF-7838", "WF-7840", "WF-7848"]
+models = ["EC-C7000", "ET-16150", "ET-16600", "ET-16650", "ET-16680", "ET-5800", "ET-5850", "ET-5880", "EW-M873T", "L11160", "L11168", "L15150", "L15158", "L15160", "L15168", "L15180", "L15188", "L6550", "L6551", "L6558", "L6570", "L6571", "L6578", "L6580", "L6581", "L6588", "PX-M6010F", "PX-M6011F", "PX-M6711FT", "PX-M6712FT", "PX-M791FT", "PX-S6710T", "ST-C8000", "ST-C8090", "WF-7310", "WF-7311", "WF-7315", "WF-7820", "WF-7828", "WF-7830", "WF-7838", "WF-7840", "WF-7848"]
 mem = [
   { addr = [0x33F,0x340,0x341,0x342,0x5C7] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x5E,0x00] },
 ]
@@ -2144,7 +2822,7 @@ mem_high = 0x7FF
 rkey = 0x0557
 wkey = "Bmuibfb/"
 wkey1 = "Althaea."
-models = ["EP-707A", "EP-777A", "EP-807A", "EP-907A", "EP-907F", "EP-977A3", "XP-520", "XP-620", "XP-621", "XP-625", "XP-720", "XP-721", "XP-760", "XP-820", "XP-821", "XP-860"]
+models = ["EP-707A", "EP-777A", "EP-807A", "EP-907A", "EP-907F", "EP-977A3", "XP-620", "XP-621", "XP-625", "XP-720", "XP-721", "XP-760", "XP-820", "XP-821", "XP-860"]
 mem = [
   { addr = [0x06] , desc = "Waste counter" },
   { addr = [0x10,0x11] , desc = "Waste counter" },
@@ -2154,22 +2832,6 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x3FF
-
-[[EPSON]]
-rkey = 0x0849
-wkey = "Bsboujgp"
-wkey1 = "Arantifo"
-models = ["ET-2700", "ET-2701", "ET-2702", "ET-2703", "ET-2704", "ET-2705", "ET-2706", "ET-2708", "ET-2750", "ET-2751", "ET-2756", "ET-2760", "ET-3700", "ET-3710", "ET-3750", "ET-3760", "ET-4750", "ET-4760", "EW-M530F", "EW-M571T", "EW-M630T", "EW-M670FT", "L4150", "L4151", "L4152", "L4153", "L4154", "L4155", "L4156", "L4157", "L4158", "L4159", "L4160", "L4161", "L4162", "L4163", "L4164", "L4165", "L4166", "L4167", "L4168", "L4169", "L6160", "L6161", "L6168", "L6170", "L6171", "L6178", "L6190", "L6191", "L6198", "WF-2860", "WF-2861", "WF-2865", "WF-2880", "WF-2881", "WF-2885", "Workforce ST-2000", "Workforce ST-3000", "Workforce ST-4000", "Workforce ST-5000", "Workforce ST-7000", "XP-5100", "XP-5101", "XP-5105", "XP-5150", "XP-5151", "XP-5155"]
-mem = [
-  { addr = [0x1C,0x34,0x35,0x36,0x37] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x00,0x5E,0x5E] },
-  { addr = [0x2F] , desc = "Waste counter" },
-  { addr = [0x30,0x31] , desc = "Waste counter" },
-  { addr = [0x32,0x33] , desc = "Waste counter" },
-  { addr = [0x1C,0x2F,0x32,0x33,0x37] , desc = "Platen pad counters" , reset = [0x00,0x00,0x00,0x00,0x5E] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x7FF
 
 [[EPSON]]
 rkey = 0x0719
@@ -2186,173 +2848,3 @@ mem = [
 rlen = 2
 wlen = 2
 mem_high = 0x1FF
-
-[[EPSON]]
-rkey = 0x0810
-wkey = "Tjobcvoh"
-wkey1 = "Sinabung"
-models = ["EP-M570T", "ET-2600", "ET-2650", "L3050", "L3070", "L380", "L382", "L385", "L386", "L395", "L485", "L486", "L495"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E] },
-  { addr = [0x1E] , desc = "Waste counter" },
-  { addr = [0x22] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x31] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
-rkey = 0x0282
-wkey = "Hfscfsb+"
-wkey1 = "Gerbera*"
-models = ["L130", "L132", "L220", "L222", "L310", "L312", "L360", "L362", "L364", "L365", "L366", "L565", "L566"]
-mem = [
-  { addr = [0x18,0x19] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E] },
-  { addr = [0x1E] , desc = "Waste counter" },
-  { addr = [0x1A,0x1B] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x8B] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
-  { addr = [0x22] , desc = "Waste counter" },
-  { addr = [0x1C,0x1D,0x2E,0x2F,0x31] , desc = "Waste counters (?)" , reset = [0x00,0x00,0x5E,0x5E,0x00] },
-]
-rlen = 2
-wlen = 2
-mem_high = 0x1FF
-
-[[EPSON]]
-models = ["L100"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-  { addr = [0x23D,0x23E,0x23F,0x240] , desc = "Waste counter" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["L200"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-  { addr = [0x23D,0x23E,0x23F,0x240] , desc = "Waste counter" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["ME-300"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["S22"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["SX125"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["SX130"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["ME-32", "ME-33", "ME-35", "T12", "T13", "T22", "T25"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["NX100", "NX105", "SX100", "SX105", "TX100", "TX101", "TX102", "TX103", "TX104", "TX105", "TX106", "TX109"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x3FF
-
-[[EPSON]]
-models = ["NX110", "NX115", "SX110", "SX115", "SX117", "SX119", "TX110", "TX111", "TX112", "TX113", "TX114", "TX115", "TX117", "TX119"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["NX125", "NX127", "TX120", "TX121", "TX125", "TXNX120"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
-
-[[EPSON]]
-models = ["ME-320", "ME-330", "ME-340", "NX130", "NXTX130", "TX130", "TX133", "TX135"]
-mem = [
-  { addr = [0x214,0x215] , desc = "Waste counter" },
-  { addr = [0x216,0x217] , desc = "Waste counter" },
-  { addr = [0x218,0x219] , desc = "Waste counters (?)" },
-]
-rlen = 2
-wlen = 2
-mem_low = 0x100
-mem_high = 0x2FF
