@@ -76,9 +76,8 @@ class USBDevice(Device):
     def ifind(cls):
         if AVAILABLE:
             for (dev, cfg, ifc) in iter_interfaces():
-                # FIXME: not all interfaces seem to be usable
                 eps = get_bulk_io(ifc)
-                if eps:
+                if eps and ifc.bAlternateSetting == 0:
                     yield cls(*eps, ifc, cfg, dev)
 
     @classmethod
