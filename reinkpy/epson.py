@@ -3,7 +3,7 @@ __all__ = (
     'EpsonDriver',
 )
 
-from . import d4, core
+from . import d4, core, snmp
 
 import collections, dataclasses, functools, hashlib, importlib.resources, re, struct, tomllib, typing
 import logging
@@ -63,13 +63,15 @@ class Spec:
             return {'desc': 'All %ss' % pat, 'addr': list(av.keys()), 'reset': list(av.values())}
 
 
-class EpsonDriver(core.Driver):
+class Epson:
 
-    def __init__(self, target, **spec):
-        self.spec = Spec(**spec)
-        self.target = target
-        # if isinstance(target, NetworkDevice): ...
-        self.link = EpsonD4Link(target)
+    # def __init__(self, target, **spec):
+    #     self.spec = Spec(**spec)
+    #     self.target = target
+    #     if isinstance(target, core.NetworkDevice):
+    #         self.link = EpsonSNMPLink(target)
+    #     else:
+    #         self.link = EpsonD4Link(target)
 
     @classmethod
     def supports(cls, device):
@@ -77,7 +79,7 @@ class EpsonDriver(core.Driver):
 
     @classmethod
     def list_models(cls):
-        "List known models supported by this driver"
+        "List known models"
         return get_db().keys()
 
     def configure(self, name: str|bool = True) -> typing.Self:
@@ -103,7 +105,7 @@ class EpsonDriver(core.Driver):
     def detected_model(self):
         "Automatically detected printer model name"
         try:
-            m = self.target.model or self.do_id()['MDL'][0]
+            m = self.model or self.do_id()['MDL'][0]
             return re.sub(' Series$', '', m) if m else None
         except:
             _log.exception('Detecting model name failed.')
@@ -137,7 +139,7 @@ class EpsonDriver(core.Driver):
 
 
     def _ictrl(self, *msg: bytes | tuple['cmd', 'payload']) -> typing.Iterator[bytes]:
-        with self.link, self.link.get_channel('EPSON-CTRL') as ctrl: #  # (0x02, 0x02)
+        with self.link.ctrl as ctrl:
             for m in msg:
                 if isinstance(m, tuple):
                     assert len(m) == 2
@@ -206,17 +208,18 @@ class EpsonDriver(core.Driver):
             self.write_eeprom(*prev, wkey=wkey, check_read=check_read, atomic=False)
         return res
 
-    def do_id(self):
+    def do_read_id(self):
         "Read printer ID"
-        r = self.ctrl(('di', b'\x01'))[0]
+        r = self.link.read_id()
         # self.data('\x1b01@EJL ID\r\n')
-        if r.isascii():
+        if isinstance(r, bytes) and r.isascii():
             r = r.decode('ascii')
             if re.match(r'^@EJL ID\s+', r):
                 return dict((k, v.split(',')) for (k,s,v) in
                             (kv.partition(':') for kv in r[9:].split(';') if kv))
         else:
-            _log.warn('Invalid response to ID cmd: %r', a)
+            _log.warn('Invalid response to ID cmd: %r', r)
+            return r
 
     def do_status(self):
         "Get a summary of printer state"
@@ -259,7 +262,7 @@ class EpsonDriver(core.Driver):
         "Find and set the 2-bytes read key / model code (brute force)"
         orig = self.spec.rkey
         pos = self.spec.mem_low
-        with self.link, self.link.get_channel('EPSON-CTRL'):
+        with self.link.ctrl:
             for c in ikeys:
                 _log.info('Trying model code %04X', c)
                 self.spec.rkey = c
@@ -279,7 +282,7 @@ class EpsonDriver(core.Driver):
         if ikeys is None:
             DB = get_db()
             ikeys = set(s.get('wkey', b'') for s in DB.values())
-        with self.link, self.link.get_channel('EPSON-CTRL'):
+        with self.link.ctrl:
             for k in ikeys:
                 _log.info('Trying key %s', k)
                 if self.write_eeprom((addr, newval), wkey=k, check_read=True):
@@ -290,15 +293,33 @@ class EpsonDriver(core.Driver):
                     return k
 
 
-class EpsonD4Link(d4.D4Link):
+class EpsonD4(Epson):
 
     # EJL: "Epson Job Language"
     # "Exit packet mode"
     CMD_ENTER_D4 = b'\x00\x00\x00\x1b\x01@EJL 1284.4\n@EJL\n@EJL\n'
     CMD_ENTER_D4_REPLY = b'\x00\x00\x00\x08\x01\x00\xc5\x00'
 
-    # .get_channel('EPSON-CTRL') # (0x02, 0x02)
-    # .get_channel('EPSON-DATA') # (0x40, 0x40)
+    ctrl = property(lambda s: s.get_channel('EPSON-CTRL', (0x02, 0x02)))
+    # data = property(lambda s: s.get_channel('EPSON-DATA', (0x40, 0x40)))
+
+    def read_id(self):
+        with self.ctrl as c:
+            return c(('di', b'\x01'))[0]
+
+
+class EpsonSNMP(Epson):
+
+    OID_EPSON = snmp.SNMPLink.OID_ENTERPRISE + '.1248'
+    OID_CTRL = f'{OID_EPSON}.1.2.2.44.1.1.2.1'
+
+    ctrl = property(lambda s: s.get_channel(s.OID_CTRL))
+
+    def read_id(self):
+        # ppmPrinterIEEE1284DeviceId
+        r = self.get(self.OID_ENTERPRISE + '.2699.1.2.1.2.1.1.3.1')
+        print(r)
+        return r[0][1]
 
 
 def search_bin(bstr=b'', yield_raw=True):

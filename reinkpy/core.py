@@ -3,6 +3,7 @@ __all__ = (
     'Device',
     'Driver',
     'FileDevice',
+    'NetworkDevice'
 )
 
 import functools, glob, logging, pathlib
@@ -36,6 +37,13 @@ class Device:
         "Best matching driver for this device"
         s = sorted(((c.supports(self), c) for c in Driver.__subclasses__()), key=lambda t: -t[0])
         if s: return s[0][1](self)
+
+    ieee1284_device_id: str
+    def _parse_device_id(self, str):
+        "Parse IEEE 1284 device id string"
+        return dict((k, v.split(',')) for (k,s,v) in
+                    (kv.partition(':') for kv in r[9:].split(';') if kv))
+
 
 
 class FileDevice(Device):
@@ -92,6 +100,12 @@ class FileDevice(Device):
 
 class NetworkDevice(Device):
     # IPP? SNMP?
+
+    @classmethod
+    def ifind(cls):
+        # ping ip range / broadcast snmp msg
+        PORTS = (515, 631)      # printer, ipp, snmp
+        return ()
 
     def __init__(self, ip):
         self.ip = ip
