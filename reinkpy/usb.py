@@ -52,10 +52,13 @@ class USBDevice(Device):
 
     def __enter__(self):
         dev, i = self.dev, self.ifc.index
-        if dev.is_kernel_driver_active(i):
-            dev.detach_kernel_driver(i)
-            # ? .claim_interface
-            self._detached_kernel_driver = i
+        try:
+            if dev.is_kernel_driver_active(i):
+                dev.detach_kernel_driver(i)
+                # ? .claim_interface
+                self._detached_kernel_driver = i
+        except NotImplemented:
+            _log.exception('Ignoring not implemented is_kernel_driver_active')
         # _log.info('Setting configuration...')
         # try:
         #     dev.set_configuration(cfg)
