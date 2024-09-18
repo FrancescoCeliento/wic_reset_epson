@@ -1,30 +1,43 @@
-from . import usb, Device, EpsonDriver, PREFACE
+from . import Device, PREFACE
 
 import asciimatics as am, asciimatics.widgets as aw, asciimatics.scene, asciimatics.event
 #, screen, exceptions
+import asyncio, re, string, sys, logging, time
+_log = logging.getLogger('reinkpy.ui')
 
-import re, string, sys, logging
+
+def run_sep(func, wait=False):
+    "Run in separate thread"
+    from concurrent.futures import ThreadPoolExecutor
+    e = ThreadPoolExecutor()
+    f = e.submit(func)
+    e.shutdown(wait=wait)
+    return f.result() if wait else f
 
 
 class App:
 
     def __init__(self):
         self.device = aw.DropdownList(
-            [('Select device…', None), *((str(d), d) for d in Device.ifind())],
-            on_change=self.device_changed)
+            [('Scanning for devices…', None)], on_change=self.device_changed)
         self.brand = aw.DropdownList(
             [('Select brand…', None), ('EPSON', 'EPSON')],
             disabled=True, on_change=self.brand_changed)
         self.model = aw.DropdownList([], disabled=True, on_change=self.model_changed)
-        self.ops = aw.ListBox(aw.Widget.FILL_FRAME, [], on_select=self.ops_onselect)
-        self.msg = LoggingWidget()
+        self.ops = aw.ListBox(aw.Widget.FILL_FRAME, [], on_select=self.op_selected)
+        self.msg = LoggingWidget('reinkpy')
+        self.msg.write('''HELP:
+- "Tab" or arrow keys to move around
+- "Space" or "Return" to select items
+- "Esc" to quit
+''')
         def prelude_cb(sel):
             if sel: raise am.exceptions.NextScene("main")
             else: quit_()
         self.gen_scenes = scener(
             prelude=[
                 lambda screen: aw.PopUpDialog(screen, PREFACE, [
-                    "NO, I'd rather not",
+                    "NO, Escape!",
                     "YES, I shall do this",
                 ], prelude_cb)
             ],
@@ -33,8 +46,8 @@ class App:
                 framer([
                     layouter([
                         (aw.Label("ReInkPy"), 1),
-                        #(aw.Button("ReInkPy", quit_), 1),
-                    ], [14,4,14]),
+                        (aw.Button("Esc", quit_, add_box=False), 3),
+                    ], [14,4,12,1,1]),
                     layouter([
                         aw.Divider(), self.device,
                         aw.Divider(), self.brand,
@@ -48,6 +61,15 @@ class App:
                        width=lambda w: int(((8-w//80)/8) * w),
                        has_border=not True, can_scroll=True, reduce_cpu=True) ]
         )
+        run_sep(self.find_devices)
+
+    def find_devices(self):
+        res = Device.find()
+        self.device.options = [('Select device…', None), *((str(d), d) for d in res)]
+        if res:
+            # self.device.value = self.device.options[1][1]
+            self.device.focus()
+        self._needs_refresh = True
 
     def device_changed(self):
         self.brand.disabled = self.device.value is None
@@ -64,19 +86,20 @@ class App:
             self.model.value = True
             self.model.disabled = False
 
-    driver = property(lambda s: s.device.value.driver)
+    driver = property(lambda s: s.device.value and s.device.value.epson) # tmpfix
     def model_changed(self):
         # no loop here: configure should be idempotent
-        self.model.value = self.driver.configure(self.model.value).spec.model
+        self.model.value = self.driver and self.driver.configure(self.model.value).spec.model
         if self.model.value:
-            self.ops.options = [(getattr(self.driver, f).__doc__, f) for f in dir(self.driver)
-                                if re.match('do_(reset_All|(?!reset))', f, re.I)]
+            self.ops.options = [
+                (getattr(self.driver, f).__doc__, f) for f in dir(self.driver)
+                if re.match('do_', f, re.I)] # do_(reset_All|(?!reset))
             self.ops.disabled = False
         else:
             self.ops.options = [('(No operations available)', None)]
             self.ops.disabled = True
 
-    def ops_onselect(self):
+    def op_selected(self):
         if self.ops.value:
             f = getattr(self.driver, self.ops.value)
             def cb(sel):
@@ -89,10 +112,11 @@ class App:
 
     def run_op(self, f):
         try:
-            logging.info('Running %s', f.__name__)
-            logging.info('%s:\n%r', f.__name__, f())
+            _log.info('Running %s', f.__name__)
+            r = run_sep(f, wait=True)
+            _log.info('%s ended: %r', f.__name__, r)
         except:
-            logging.exception('')
+            _log.exception('Exception in %s', f.__name__)
 
     def ask(self, text, options, cb):
         p = aw.PopUpDialog(self._screen, text, options, has_shadow=True, on_close=cb)
@@ -104,23 +128,35 @@ class App:
     # def do_backup(self, fname='eeprom.txt'):
     #     "Save the current printer state (EEPROM) in a file"
 
-    def run(self):
-        def handle_input(event):
-            if isinstance(event, am.event.KeyboardEvent):
-                if event.key_code in (am.screen.Screen.KEY_ESCAPE,):
-                    quit_()
-        def play(screen, scene=None):
-            self._screen = screen
-            screen.play(self.gen_scenes(screen), start_scene=scene,
-                        stop_on_resize=True, allow_int=True, unhandled_input=handle_input)
-        last_scene = None
+    async def arun(self):
+        scene = None
         while True:
+            screen = am.screen.Screen.open()
+            self._needs_refresh = False
+            leave = True
             try:
-                am.screen.Screen.wrapper(play, catch_interrupt=False, arguments=[last_scene])
+                self._screen = screen
+                screen.set_scenes(self.gen_scenes(screen), start_scene=scene,
+                                  unhandled_input=handle_input)
+                while True:
+                    if self._needs_refresh or screen.has_resized():
+                        scene = screen._scenes[screen._scene_index]
+                        scene.exit()
+                        leave = False
+                        break
+                    else:
+                        screen.draw_next_frame()
+                        await asyncio.sleep(0.1)
+            except am.exceptions.StopApplication:
                 break
-            except am.exceptions.ResizeScreenError as e:
-                last_scene = e.scene
+            finally:
+                screen.close(leave)
 
+
+def handle_input(event):
+    if isinstance(event, am.event.KeyboardEvent):
+        if event.key_code in (am.screen.Screen.KEY_ESCAPE,):
+            quit_()
 
 def quit_():
     raise am.exceptions.StopApplication("Quit")
@@ -154,42 +190,45 @@ def scener(**nf):
 
 class LoggingWidget(aw.TextBox):
 
-    def __init__(self):
-        super().__init__(22, as_string=True, line_wrap=not True, readonly=True, disabled=not True)
-        logging.getLogger().addHandler(logging.StreamHandler(self))
+    def __init__(self, name):
+        super().__init__(22, as_string=True, line_wrap=False, readonly=True, disabled=False)
+        logging.getLogger(name).addHandler(logging.StreamHandler(self))
 
     def write(self, msg: str):
         self.value = self.value + str(msg) + '\n'
 
-    # MAYBE: modal dialog on level >= WARNING
+    # TODO: modal dialog on level >= WARNING
     # def popup(self):
 
 
-def main():
+async def amain():
     import logging.handlers, os, time
     logging.basicConfig()
     logger = logging.getLogger()
+    # logger.setLevel(logging.DEBUG)
     if not os.path.exists('logs'): os.mkdir('logs')
     logfile = os.path.join('logs', time.strftime('reinkpy-%Y%m%d.log'))
-    h = logging.handlers.RotatingFileHandler(logfile, backupCount=5, delay=True)
-    h.setFormatter(logger.handlers[0].formatter)
-    h.doRollover()
-    logger.addHandler(h)
+    rfh = logging.handlers.RotatingFileHandler(logfile, backupCount=5, delay=True)
+    rfh.setFormatter(logger.handlers[0].formatter)
+    rfh.doRollover()
+    logger.addHandler(rfh)
     off = []
     for h in logger.handlers:
         if isinstance(h, logging.StreamHandler) and h.stream.name in ('<stdout>', '<stderr>'):
             off.append(h)
             logger.removeHandler(h)
-
     try:
-        App().run()
+        await App().arun()
     except:
         for h in off: logger.addHandler(h)
         logging.exception('')
     finally:
-        h.close()
+        rfh.close()
         if os.path.exists(logfile):
             print('Log file: ' + logfile)
+
+def main():
+    asyncio.run(amain())
 
 
 if __name__ == "__main__":

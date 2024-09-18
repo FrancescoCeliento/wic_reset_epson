@@ -8,7 +8,7 @@ $(info version: ${version})
 pyz: dist/reinkpy-${version}.pyz
 .DEFAULT_GOAL := pyz
 
-deps := lib/asciimatics pyusb
+deps := lib/asciimatics pyusb pysnmp-lextudio zeroconf
 wdir := build/wheels
 fdir := build/files
 

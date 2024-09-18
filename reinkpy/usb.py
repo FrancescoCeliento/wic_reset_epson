@@ -1,12 +1,11 @@
 # SPDX-License-Identifier: AGPL-3.0-or-later
 __all__ = (
-    'USBDevice',
+    'UsbIO',
 )
 
-from .core import Device
 from .helpers import hexdump
 
-import re as _re
+import functools
 import logging
 _log = logging.getLogger(__name__)
 del logging
@@ -31,7 +30,7 @@ DEVICE_FIELDS = ('idVendor', 'idProduct',
 IFACE_FIELDS = ('bInterfaceNumber', 'bAlternateSetting')
 
 
-class USBDevice(Device):
+class UsbIO:
 
     def __init__(self, epIn, epOut, ifc, cfg, dev):
         self.epIn, self.epOut = epIn, epOut
@@ -48,7 +47,7 @@ class USBDevice(Device):
         return res
 
     def __str__(self):
-        return '{0.__class__.__name__} {0.brand} {0.model} ({0.serial_number}) [{0.dev.bus}:{0.dev.address}:{0.bInterfaceNumber}:({0.epIn.bEndpointAddress},{0.epOut.bEndpointAddress})]'.format(self)
+        return 'usb:{0.dev.bus}:{0.dev.address}:{0.ifc.bInterfaceNumber}:({0.epIn.bEndpointAddress},{0.epOut.bEndpointAddress})'.format(self)
 
     def __enter__(self):
         dev, i = self.dev, self.ifc.index
@@ -100,13 +99,10 @@ class USBDevice(Device):
         #     _log.warning('Failed to configure device: %s, %s', spec, e)
         return cls(*eps, ifc, cfg, dev)
 
-    brand = property(lambda s: s.manufacturer)
-    model = property(lambda s: s.product)
-
-def fprop(k, on): return property(lambda s: getattr(getattr(s, on), k))
-for k in DEVICE_FIELDS: setattr(USBDevice, k, fprop(k, 'dev'))
-for k in IFACE_FIELDS: setattr(USBDevice, k, fprop(k, 'ifc'))
-del k
+    @functools.cached_property
+    def info(self):
+        return dict([(k, getattr(self.dev, k)) for k in DEVICE_FIELDS] +
+                    [(k, getattr(self.ifc, k)) for k in IFACE_FIELDS])
 
 
 def iter_interfaces(bClass=BCLASS_PRINTER,  # match bDeviceClass or bInterfaceClass

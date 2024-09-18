@@ -3,9 +3,7 @@ __all__ = (
     'EpsonDriver',
 )
 
-from . import d4, core, snmp
-
-import collections, dataclasses, functools, hashlib, importlib.resources, re, struct, tomllib, typing
+import collections, contextlib, dataclasses, functools, hashlib, importlib.resources, re, struct, tomllib, typing
 import logging
 _log = logging.getLogger(__name__)
 del logging
@@ -33,7 +31,7 @@ class Spec:
     brand: str = "EPSON"             # iManufacturer
     idVendor: int = 0x04b8
     idProduct: int = None
-    serial_number: str = None
+    # serial_number: str = None
     # 2-bytes model code, needed to read from EEPROM
     rkey: int = 0
     # 8-bytes, needed to write to EEPROM
@@ -60,22 +58,24 @@ class Spec:
             if re.search(pat, m['desc'], re.I):
                 av.update(zip(m['addr'], m.get('reset', [0]*len(m['addr']))))
         if av:
-            return {'desc': 'All %ss' % pat, 'addr': list(av.keys()), 'reset': list(av.values())}
+            return {'desc': 'All %ss' % pat, 'addr': list(av.keys()),
+                    'reset': list(av.values())}
 
 
 class Epson:
 
-    # def __init__(self, target, **spec):
-    #     self.spec = Spec(**spec)
-    #     self.target = target
-    #     if isinstance(target, core.NetworkDevice):
-    #         self.link = EpsonSNMPLink(target)
-    #     else:
-    #         self.link = EpsonD4Link(target)
+    def __init__(self, link, **spec):
+        self.spec = Spec(**spec) # -> prop
+        self.link = link        # d4 / snmp
+        self._init_link()
 
-    @classmethod
-    def supports(cls, device):
-        return device.brand == 'EPSON'
+    @property
+    def detected_model(self):
+        "Automatically detected printer model name"
+        try:
+            return re.sub(' Series$', '', self.info['MDL'])
+        except:
+            _log.exception('Detecting model name failed.')
 
     @classmethod
     def list_models(cls):
@@ -87,28 +87,20 @@ class Epson:
 
         Pass `True` to autodetect model, `False` to clear specs.
         """
-        if name is True:        # auto
+        if name is True:
             name = self.detected_model
         if name:
             if name in get_db():
                 self.spec = Spec(**get_db()[name])
             else:
                 _log.warn(f'Unknown model name: "{name}"')
-        else: # unset
+        else:
             self.spec = Spec()
         m, d = (self.spec.model, self.detected_model)
         if m and d and m != d:
-            _log.warn('Loading specs for model "%s" but the printer presents itself as "%s"', m, d)
+            _log.warn('Loading specs for model "%s" but the printer '
+                      'presents itself as "%s"', m, d)
         return self
-
-    @functools.cached_property
-    def detected_model(self):
-        "Automatically detected printer model name"
-        try:
-            m = self.model or self.do_id()['MDL'][0]
-            return re.sub(' Series$', '', m) if m else None
-        except:
-            _log.exception('Detecting model name failed.')
 
     def _mem_ops(self):
         for m in self.spec.mem:
@@ -138,18 +130,22 @@ class Epson:
         raise AttributeError
 
 
-    def _ictrl(self, *msg: bytes | tuple['cmd', 'payload']) -> typing.Iterator[bytes]:
-        with self.link.ctrl as ctrl:
-            for m in msg:
-                if isinstance(m, tuple):
-                    assert len(m) == 2
-                    m = self.encode(*m)
-                assert isinstance(m, bytes)
-                yield ctrl(m)
-
     def ctrl(self, *msg: bytes | tuple['cmd', 'payload']) -> tuple[bytes, ...]:
         """Send msg to the CTRL channel"""
         return tuple(self._ictrl(*msg))
+
+    def _ictrl(self, *msg: bytes | tuple['cmd', 'payload']) -> typing.Iterator[bytes]:
+        with self.ctrl_channel as c:
+            for m in self._iencode(*msg):
+                yield c(m)
+
+    def _iencode(self, *msg: bytes | tuple['cmd', 'payload']) -> typing.Iterator[bytes]:
+        for m in msg:
+            if isinstance(m, tuple):
+                assert len(m) == 2
+                m = self.encode(*m)
+            assert isinstance(m, bytes)
+            yield m
 
     def encode(self, cmd: str | tuple[str, str], payload: bytes = b'') -> bytes:
         # payload = bytes(payload)
@@ -178,7 +174,7 @@ class Epson:
                 assert p == a
                 res.append((a, val))
             except:
-                _log.exception('Invalid response reading addr %s: %r', a, r)
+                _log.warn('Invalid response reading addr %s: %r', a, r)
                 res.append((a, None))
         return res
 
@@ -200,45 +196,40 @@ class Epson:
         CMD = ('|', 'B') # (0x7c, 0x42)
         # addresses are little endian; field values big endian (here 1-byte)
         res = True
-        for ((a,v),r) in zip(addrval, self._ictrl(*((CMD, struct.pack('<'+c+'B', a, v) + wkey)
-                                                    for (a,v) in addrval))):
-            res &= ((b':OK;' in r) and ((not check_read) or (self.read_eeprom(a) == [(a, v)])))
+        for ((a,v),r) in zip(addrval,
+                             self._ictrl(*((CMD, struct.pack('<'+c+'B', a, v) + wkey)
+                                           for (a,v) in addrval))):
+            res &= ((b':OK;' in r) and ((not check_read) or
+                                        (self.read_eeprom(a) == [(a, v)])))
         if atomic and not res:
             _log.warn('Writing failed. Trying to restore previous values')
             self.write_eeprom(*prev, wkey=wkey, check_read=check_read, atomic=False)
         return res
 
-    def do_read_id(self):
-        "Read printer ID"
-        r = self.link.read_id()
-        # self.data('\x1b01@EJL ID\r\n')
-        if isinstance(r, bytes) and r.isascii():
-            r = r.decode('ascii')
-            if re.match(r'^@EJL ID\s+', r):
-                return dict((k, v.split(',')) for (k,s,v) in
-                            (kv.partition(':') for kv in r[9:].split(';') if kv))
-        else:
-            _log.warn('Invalid response to ID cmd: %r', r)
-            return r
-
     def do_status(self):
         "Get a summary of printer state"
         return self.ctrl(('st', b'\x01'))[0] # b'@BDC ST2\r\n...'
-        # Turn printer state reply on/off (Remote Mode): ST 02H 00H 00H m1
-
-    def do_serial_number(self):
-        "Read serial number"
-        #  self.link.tsp.serial_number
-        try: return self.do_id()['SN'][0]
-        except: _log.exception('')
+        # To turn printer state reply on/off (Remote Mode): ST 02H 00H 00H m1
 
     def do_rw(self):
         """Run generic "rw" command (for "reset waste"?)"""
-        n = self.spec.serial_number or self.do_serial_number()
+        n = self.info.get('serial_number', None)
         if n:
             return self.ctrl(('rw', b'\x00' + hashlib.sha1(n.encode('ascii')).digest()))[0]
         else:
             _log.warn('Serial number unknown. Cannot use "rw" command.')
+
+    def reset_waste(self):
+        "Reset all known waste counters for this model"
+        for name in dir(self):
+            if name.startswith('do_reset_All_waste_counters_'):
+                f = getattr(self, name)
+                break
+        else:
+            _log.error('Operation unavailable')
+            return
+        _log.info('Running %s', f.__name__)
+        return f()
 
     # "REMOTE MODE"
     # 'fl' / 'gm' # before loading firmware, in recovery mode
@@ -262,7 +253,7 @@ class Epson:
         "Find and set the 2-bytes read key / model code (brute force)"
         orig = self.spec.rkey
         pos = self.spec.mem_low
-        with self.link.ctrl:
+        with self.ctrl_channel:
             for c in ikeys:
                 _log.info('Trying model code %04X', c)
                 self.spec.rkey = c
@@ -282,7 +273,7 @@ class Epson:
         if ikeys is None:
             DB = get_db()
             ikeys = set(s.get('wkey', b'') for s in DB.values())
-        with self.link.ctrl:
+        with self.ctrl_channel:
             for k in ikeys:
                 _log.info('Trying key %s', k)
                 if self.write_eeprom((addr, newval), wkey=k, check_read=True):
@@ -295,31 +286,49 @@ class Epson:
 
 class EpsonD4(Epson):
 
-    # EJL: "Epson Job Language"
-    # "Exit packet mode"
-    CMD_ENTER_D4 = b'\x00\x00\x00\x1b\x01@EJL 1284.4\n@EJL\n@EJL\n'
-    CMD_ENTER_D4_REPLY = b'\x00\x00\x00\x08\x01\x00\xc5\x00'
+    def _init_link(self):
+        # EJL: "Epson Job Language"
+        # "Exit packet mode"
+        self.link.CMD_ENTER_D4 = b'\x00\x00\x00\x1b\x01@EJL 1284.4\n@EJL\n@EJL\n'
+        self.link.CMD_ENTER_D4_REPLY = b'\x00\x00\x00\x08\x01\x00\xc5\x00'
+        self.ctrl_channel = self.link.get_channel('EPSON-CTRL', (0x02, 0x02))
+        # data_channel = .get_channel('EPSON-DATA', (0x40, 0x40))
 
-    ctrl = property(lambda s: s.get_channel('EPSON-CTRL', (0x02, 0x02)))
-    # data = property(lambda s: s.get_channel('EPSON-DATA', (0x40, 0x40)))
+    def _read_id_string(self):
+        # Or send '\x1b01@EJL ID\r\n' to data_channel / non-D4?
+        r = self.ctrl(('di', b'\x01'))[0]
+        assert isinstance(r, bytes) and r.isascii()
+        return re.match(r'^@EJL ID\s+((.|\s)+)', r.decode('ascii')).group(1)
 
-    def read_id(self):
-        with self.ctrl as c:
-            return c(('di', b'\x01'))[0]
+    @functools.cached_property
+    def info(self) -> dict:
+        try:
+            r = self._read_id_string()
+            from . import _parse_ieee1284_id
+            return _parse_ieee1284_id(r)
+        except:
+            _log.exception('Reading printer ID failed.')
+            return {}
 
 
 class EpsonSNMP(Epson):
 
-    OID_EPSON = snmp.SNMPLink.OID_ENTERPRISE + '.1248'
-    OID_CTRL = f'{OID_EPSON}.1.2.2.44.1.1.2.1'
+    def _init_link(self):
+        self.link.OID_EPSON = self.link.OID_ENTERPRISE + '.1248'
+        self.link.OID_CTRL = self.link.OID_EPSON + '.1.2.2.44.1.1.2.1'
+        self.ctrl_channel = contextlib.nullcontext(self._ctrl_send)
 
-    ctrl = property(lambda s: s.get_channel(s.OID_CTRL))
+    def _ctrl_send(self, m):
+        # *struct.unpack('B'*len(payload), payload)
+        res = self.link.get('.'.join((self.link.OID_CTRL, *(str(b) for b in m))))
+        #
+        return res[0][1].asOctets()
 
-    def read_id(self):
-        # ppmPrinterIEEE1284DeviceId
-        r = self.get(self.OID_ENTERPRISE + '.2699.1.2.1.2.1.1.3.1')
-        print(r)
-        return r[0][1]
+    # @functools.cached_property
+    @property
+    def info(self) -> dict:
+        return self.link.info
+
 
 
 def search_bin(bstr=b'', yield_raw=True):

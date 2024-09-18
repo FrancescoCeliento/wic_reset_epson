@@ -29,7 +29,8 @@ dependencies = [
 [optional-dependencies]
 usb = [ "usb" ]
 ui = [ "asciimatics" ]
-snmp = ["pysnmp-lextudio >= 6.1" ]
+net = ["pysnmp-lextudio >= 6.1", "zeroconf" ]
+
 
 [tool.setuptools_scm]
 

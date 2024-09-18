@@ -2,40 +2,45 @@ ReInkPy
 =======
 Waste ink counter resetter for some (EPSON) printers.
 
-Free and open. Python code.
+Free and open. [Python](https://python.org) code.
 
 
-# Simple GUI usage
-
-Download and execute the latest release as `.pyz` file.
-
-
-# More advanced tasks and development
+# Getting started
 
 ```
 pip install -e git+https://codeberg.org/atufi/reinkpy#egg=reinkpy
 ```
 
-Python API example:
+`python -m reinkpy.ui` launches a GUI.
+
+
+Python API examples:
 
 ```
-from reinkpy import *
+import reinkpy
 
-d = next(Device.ifind()).driver.configure()
-assert d.specs.model # model is known
-d.do_id()
-d.do_reset_All_waste_counters_…() # dynamically generated methods
-d.read_eeprom()
-d.write_eeprom((address, value), …)
+for p in reinkpy.Device.find():
+	print(p)
+    print(p.info)
+
+# Get a specific device
+d = Device.from_file('/dev/usb/lp0')
+d = Device.from_usb(manufacturer='EPSON')
+d = Device.from_ip('192.168.0.255')
+
+e = d.epson # Epson driver
+assert e.specs.model # model is known
+
+print(e.read_eeprom())
+# e.reset_waste()
+# e.write_eeprom((address, value), …)
 ```
 
-`python -m reinkpy.ui` launches the GUI.
+CLI one-liners:
 
+`python -c 'import reinkpy;print(reinkpy.Device.from_usb().epson.read_eeprom(*range(256)))'`
 
-# Requirements
-
-- [python](https://python.org)
-- (optional) some USB backend for [libusb](https://libusb.info)
+`python -c 'import reinkpy;reinkpy.Device.from_ip("1.2.3.4").epson.reset_waste()'`
 
 
 # Warning
