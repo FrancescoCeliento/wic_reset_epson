@@ -72,10 +72,10 @@ class Epson:
     @property
     def detected_model(self):
         "Automatically detected printer model name"
-        try:
+        if 'MDL' in self.info:
             return re.sub(' Series$', '', self.info['MDL'])
-        except:
-            _log.exception('Detecting model name failed.')
+        else:
+            _log.warn('Detecting model name failed.')
 
     @classmethod
     def list_models(cls):
