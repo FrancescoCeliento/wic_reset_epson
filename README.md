@@ -8,7 +8,7 @@ Free and open. [Python](https://python.org) code.
 # Getting started
 
 ```
-pip install -e git+https://codeberg.org/atufi/reinkpy#egg=reinkpy
+pip install -e git+https://codeberg.org/atufi/reinkpy#egg=reinkpy[ui,usb,net]
 ```
 
 `python -m reinkpy.ui` launches a GUI.
