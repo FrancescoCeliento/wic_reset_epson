@@ -13,6 +13,8 @@ pip install -e git+https://codeberg.org/atufi/reinkpy#egg=reinkpy[ui,usb,net]
 
 `python -m reinkpy.ui` launches a GUI.
 
+For debugging: `LOGLEVEL=DEBUG python -m reinkpy.ui`, then look at the log file
+mentioned on the CLI.
 
 Python API examples:
 
@@ -23,12 +25,12 @@ for p in reinkpy.Device.find():
 	print(p)
     print(p.info)
 
-# Get a specific device
-d = Device.from_file('/dev/usb/lp0')
-d = Device.from_usb(manufacturer='EPSON')
-d = Device.from_ip('192.168.0.255')
+# Or get a specific device
+p = reinkpy.Device.from_file('/dev/usb/lp0')
+p = reinkpy.Device.from_usb(manufacturer='EPSON')
+p = reinkpy.Device.from_ip('192.168.0.255')
 
-e = d.epson # Epson driver
+e = p.epson # Epson driver
 assert e.specs.model # model is known
 
 print(e.read_eeprom())

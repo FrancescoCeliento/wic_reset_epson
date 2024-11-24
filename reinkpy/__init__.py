@@ -10,10 +10,11 @@ try:
 except ImportError:
     __version__ = None
 
-import logging
-logging.basicConfig(format="{levelname: <6} {name: <16} {message}", level=logging.INFO, style="{")
+import logging, os
+logging.basicConfig(format="{levelname: <6} {name: <16} {message}",
+                    level=os.environ.get('LOGLEVEL', logging.INFO), style="{")
 _log = logging.getLogger(__name__)
-del logging
+del logging, os
 
 import functools
 
