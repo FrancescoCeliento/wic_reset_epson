@@ -1,0 +1,8 @@
+setuptools>=61
+setuptools_scm[toml]>=6.2
+pywin32; platform_system == 'Windows'
+pyusb
+asciimatics
+pysnmp-lextudio==6.1.2
+pyasn1==0.6.0
+zeroconf

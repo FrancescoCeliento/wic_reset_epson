@@ -5,6 +5,10 @@ import asciimatics as am, asciimatics.widgets as aw, asciimatics.scene, asciimat
 import asyncio, re, string, sys, logging, time
 _log = logging.getLogger('reinkpy.ui')
 
+import platform
+if platform.system()=='Windows':
+    asyncio.set_event_loop_policy(asyncio.WindowsSelectorEventLoopPolicy())
+
 
 def run_sep(func, wait=False):
     "Run in separate thread"
@@ -147,7 +151,10 @@ class App:
                     else:
                         screen.draw_next_frame()
                         await asyncio.sleep(0.1)
-            except am.exceptions.StopApplication:
+            except(
+                asyncio.exceptions.CancelledError,
+                am.exceptions.StopApplication
+            ):
                 break
             finally:
                 screen.close(leave)
@@ -232,4 +239,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except (KeyboardInterrupt, RuntimeError):
+        print('\n\nInterrupted.\n')
