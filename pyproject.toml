@@ -27,7 +27,7 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
-usb = [ "usb" ]
+usb = [ "pyusb" ]
 ui = [ "asciimatics" ]
 net = ["pysnmp-lextudio == 6.1.2", "pyasn1 == 0.6.0", "zeroconf" ]
 
