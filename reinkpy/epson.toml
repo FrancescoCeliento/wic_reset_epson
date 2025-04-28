@@ -1325,6 +1325,12 @@ wlen = 2
 mem_high = 0x7FF
 
 [[EPSON]]
+rkey = 0x364B
+wkey = "Lfokfsbo"
+wkey1 = "Kenjeran"
+models = ["XP-2200"]
+
+[[EPSON]]
 rkey = 0x370E
 models = ["PM-A900", "RX700"]
 mem = [
