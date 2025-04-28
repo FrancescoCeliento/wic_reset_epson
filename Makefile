@@ -16,7 +16,8 @@ dist/reinkpy-${version}.pyz:
 	mkdir -p ${@D} ${wdir} ${fdir}
 	python -m pip wheel --wheel-dir ${wdir} --find-links ${wdir} . ${deps}
 	rm -f ${wdir}/*.zip ; for f in ${wdir}/*.whl ; do ln -frs $$f $$f.zip ; done
-	unzip "${wdir}/*.zip" -d ${fdir} # rm -rf ${fdir}/*.dist-info
+	rm -rf ${fdir}/* #.dist-info
+	unzip "${wdir}/*.zip" -d ${fdir}
 	python -m zipapp -p "/usr/bin/env python3" --main "reinkpy.ui:main" -c --output $@ ${fdir}
 
 clean::
