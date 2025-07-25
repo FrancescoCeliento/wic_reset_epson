@@ -31,7 +31,7 @@ p = reinkpy.Device.from_usb(manufacturer='EPSON')
 p = reinkpy.Device.from_ip('192.168.0.255')
 
 e = p.epson # Epson driver
-if not e.specs.model: # Either model is unknown or autoconfiguration failed
+if not e.spec.model: # Either model is unknown or autoconfiguration failed
     # Some printers just don't advertise their model name cleanly, e.g.
 	e.configure("XP-352")
 
