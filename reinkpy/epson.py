@@ -189,6 +189,9 @@ class Epson:
         if atomic:
             prev = self.read_eeprom(*(a[0] for a in addrval))
             _log.info('Current EEPROM values: %s', prev)
+            if not all(isinstance(v, int) for a,v in prev):
+                _log.warn('Aborting write because current values cannot be read.')
+                return
         _log.info('Writing to EEPROM: %s', addrval)
         if wkey is None:
             wkey = self.spec.wkey
