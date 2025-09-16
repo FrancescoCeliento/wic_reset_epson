@@ -57,7 +57,7 @@ class UsbIO:
                 # ? .claim_interface
                 self._detached_kernel_driver = i
         except NotImplementedError:
-            _log.exception('Ignoring not implemented is_kernel_driver_active')
+            _log.warning('Skipping is_kernel_driver_active check (not implemented in this backend)')
         # _log.info('Setting configuration...')
         # try:
         #     dev.set_configuration(cfg)
