@@ -58,3 +58,8 @@ This was started as a port of [ReInk](https://github.com/lion-simba/reink/).
 See also [epson_print_conf](https://github.com/Ircama/epson_print_conf).
 
 For use on closed platforms, see [issue #16](https://codeberg.org/atufi/reinkpy/issues/16).
+
+
+# My test
+
+Reset performed correctly on an Epson ET-2710.
